@@ -1,404 +1,404 @@
 local temper = require('temper-core');
-local ChangesetError, Changeset, ChangesetImpl__100, OrderClause, Query, SafeIdentifier, ValidatedIdentifier__124, FieldType, StringField, IntField, Int64Field, FloatField, BoolField, DateField, FieldDef, TableDef, SqlBuilder, SqlFragment, SqlPart, SqlSource, SqlBoolean, SqlDate, SqlFloat64, SqlInt32, SqlInt64, SqlString, changeset, isIdentStart__305, isIdentPart__306, safeIdentifier, deleteSql, from, exports;
+local ChangesetError, Changeset, ChangesetImpl__108, JoinType, InnerJoin, LeftJoin, RightJoin, FullJoin, JoinClause, OrderClause, Query, SafeIdentifier, ValidatedIdentifier__142, FieldType, StringField, IntField, Int64Field, FloatField, BoolField, DateField, FieldDef, TableDef, SqlBuilder, SqlFragment, SqlPart, SqlSource, SqlBoolean, SqlDate, SqlFloat64, SqlInt32, SqlInt64, SqlString, changeset, isIdentStart__345, isIdentPart__346, safeIdentifier, deleteSql, from, col, exports;
 ChangesetError = temper.type('ChangesetError');
-ChangesetError.constructor = function(this__159, field__312, message__313)
-  this__159.field__309 = field__312;
-  this__159.message__310 = message__313;
+ChangesetError.constructor = function(this__177, field__352, message__353)
+  this__177.field__349 = field__352;
+  this__177.message__350 = message__353;
   return nil;
 end;
-ChangesetError.get.field = function(this__864)
-  return this__864.field__309;
+ChangesetError.get.field = function(this__976)
+  return this__976.field__349;
 end;
-ChangesetError.get.message = function(this__867)
-  return this__867.message__310;
+ChangesetError.get.message = function(this__979)
+  return this__979.message__350;
 end;
 Changeset = temper.type('Changeset');
-Changeset.get.tableDef = function(this__87)
+Changeset.get.tableDef = function(this__95)
   temper.virtual();
 end;
-Changeset.get.changes = function(this__88)
+Changeset.get.changes = function(this__96)
   temper.virtual();
 end;
-Changeset.get.errors = function(this__89)
+Changeset.get.errors = function(this__97)
   temper.virtual();
 end;
-Changeset.get.isValid = function(this__90)
+Changeset.get.isValid = function(this__98)
   temper.virtual();
 end;
-Changeset.methods.cast = function(this__91, allowedFields__323)
+Changeset.methods.cast = function(this__99, allowedFields__363)
   temper.virtual();
 end;
-Changeset.methods.validateRequired = function(this__92, fields__326)
+Changeset.methods.validateRequired = function(this__100, fields__366)
   temper.virtual();
 end;
-Changeset.methods.validateLength = function(this__93, field__329, min__330, max__331)
+Changeset.methods.validateLength = function(this__101, field__369, min__370, max__371)
   temper.virtual();
 end;
-Changeset.methods.validateInt = function(this__94, field__334)
+Changeset.methods.validateInt = function(this__102, field__374)
   temper.virtual();
 end;
-Changeset.methods.validateInt64 = function(this__95, field__337)
+Changeset.methods.validateInt64 = function(this__103, field__377)
   temper.virtual();
 end;
-Changeset.methods.validateFloat = function(this__96, field__340)
+Changeset.methods.validateFloat = function(this__104, field__380)
   temper.virtual();
 end;
-Changeset.methods.validateBool = function(this__97, field__343)
+Changeset.methods.validateBool = function(this__105, field__383)
   temper.virtual();
 end;
-Changeset.methods.toInsertSql = function(this__98)
+Changeset.methods.toInsertSql = function(this__106)
   temper.virtual();
 end;
-Changeset.methods.toUpdateSql = function(this__99, id__348)
+Changeset.methods.toUpdateSql = function(this__107, id__388)
   temper.virtual();
 end;
-ChangesetImpl__100 = temper.type('ChangesetImpl__100', Changeset);
-ChangesetImpl__100.get.tableDef = function(this__101)
-  return this__101._tableDef__350;
+ChangesetImpl__108 = temper.type('ChangesetImpl__108', Changeset);
+ChangesetImpl__108.get.tableDef = function(this__109)
+  return this__109._tableDef__390;
 end;
-ChangesetImpl__100.get.changes = function(this__102)
-  return this__102._changes__352;
+ChangesetImpl__108.get.changes = function(this__110)
+  return this__110._changes__392;
 end;
-ChangesetImpl__100.get.errors = function(this__103)
-  return this__103._errors__353;
+ChangesetImpl__108.get.errors = function(this__111)
+  return this__111._errors__393;
 end;
-ChangesetImpl__100.get.isValid = function(this__104)
-  return this__104._isValid__354;
+ChangesetImpl__108.get.isValid = function(this__112)
+  return this__112._isValid__394;
 end;
-ChangesetImpl__100.methods.cast = function(this__105, allowedFields__364)
-  local mb__366, fn__5014;
-  mb__366 = temper.mapbuilder_constructor();
-  fn__5014 = function(f__367)
-    local t_0, t_1, val__368;
-    t_1 = f__367.sqlValue;
-    val__368 = temper.mapped_getor(this__105._params__351, t_1, '');
-    if not temper.string_isempty(val__368) then
-      t_0 = f__367.sqlValue;
-      temper.mapbuilder_set(mb__366, t_0, val__368);
+ChangesetImpl__108.methods.cast = function(this__113, allowedFields__404)
+  local mb__406, fn__5700;
+  mb__406 = temper.mapbuilder_constructor();
+  fn__5700 = function(f__407)
+    local t_0, t_1, val__408;
+    t_1 = f__407.sqlValue;
+    val__408 = temper.mapped_getor(this__113._params__391, t_1, '');
+    if not temper.string_isempty(val__408) then
+      t_0 = f__407.sqlValue;
+      temper.mapbuilder_set(mb__406, t_0, val__408);
     end
     return nil;
   end;
-  temper.list_foreach(allowedFields__364, fn__5014);
-  return ChangesetImpl__100(this__105._tableDef__350, this__105._params__351, temper.mapped_tomap(mb__366), this__105._errors__353, this__105._isValid__354);
+  temper.list_foreach(allowedFields__404, fn__5700);
+  return ChangesetImpl__108(this__113._tableDef__390, this__113._params__391, temper.mapped_tomap(mb__406), this__113._errors__393, this__113._isValid__394);
 end;
-ChangesetImpl__100.methods.validateRequired = function(this__106, fields__370)
-  local return__192, t_2, t_3, t_4, t_5, eb__372, valid__373, fn__5003;
+ChangesetImpl__108.methods.validateRequired = function(this__114, fields__410)
+  local return__210, t_2, t_3, t_4, t_5, eb__412, valid__413, fn__5689;
   ::continue_1::
-  if not this__106._isValid__354 then
-    return__192 = this__106;
+  if not this__114._isValid__394 then
+    return__210 = this__114;
     goto break_0;
   end
-  eb__372 = temper.list_tolistbuilder(this__106._errors__353);
-  valid__373 = true;
-  fn__5003 = function(f__374)
+  eb__412 = temper.list_tolistbuilder(this__114._errors__393);
+  valid__413 = true;
+  fn__5689 = function(f__414)
     local t_6, t_7;
-    t_7 = f__374.sqlValue;
-    if not temper.mapped_has(this__106._changes__352, t_7) then
-      t_6 = ChangesetError(f__374.sqlValue, 'is required');
-      temper.listbuilder_add(eb__372, t_6);
-      valid__373 = false;
+    t_7 = f__414.sqlValue;
+    if not temper.mapped_has(this__114._changes__392, t_7) then
+      t_6 = ChangesetError(f__414.sqlValue, 'is required');
+      temper.listbuilder_add(eb__412, t_6);
+      valid__413 = false;
     end
     return nil;
   end;
-  temper.list_foreach(fields__370, fn__5003);
-  t_3 = this__106._tableDef__350;
-  t_4 = this__106._params__351;
-  t_5 = this__106._changes__352;
-  t_2 = temper.listbuilder_tolist(eb__372);
-  return__192 = ChangesetImpl__100(t_3, t_4, t_5, t_2, valid__373);
-  ::break_0::return return__192;
+  temper.list_foreach(fields__410, fn__5689);
+  t_3 = this__114._tableDef__390;
+  t_4 = this__114._params__391;
+  t_5 = this__114._changes__392;
+  t_2 = temper.listbuilder_tolist(eb__412);
+  return__210 = ChangesetImpl__108(t_3, t_4, t_5, t_2, valid__413);
+  ::break_0::return return__210;
 end;
-ChangesetImpl__100.methods.validateLength = function(this__107, field__376, min__377, max__378)
-  local return__193, t_8, t_9, t_10, t_11, t_12, t_13, val__380, len__381;
+ChangesetImpl__108.methods.validateLength = function(this__115, field__416, min__417, max__418)
+  local return__211, t_8, t_9, t_10, t_11, t_12, t_13, val__420, len__421;
   ::continue_3::
-  if not this__107._isValid__354 then
-    return__193 = this__107;
+  if not this__115._isValid__394 then
+    return__211 = this__115;
     goto break_2;
   end
-  t_8 = field__376.sqlValue;
-  val__380 = temper.mapped_getor(this__107._changes__352, t_8, '');
-  len__381 = temper.string_countbetween(val__380, 1.0, temper.string_end(val__380));
-  if (len__381 < min__377) then
+  t_8 = field__416.sqlValue;
+  val__420 = temper.mapped_getor(this__115._changes__392, t_8, '');
+  len__421 = temper.string_countbetween(val__420, 1.0, temper.string_end(val__420));
+  if (len__421 < min__417) then
     t_10 = true;
   else
-    t_10 = (len__381 > max__378);
+    t_10 = (len__421 > max__418);
   end
   if t_10 then
-    local msg__382, eb__383;
-    msg__382 = temper.concat('must be between ', temper.int32_tostring(min__377), ' and ', temper.int32_tostring(max__378), ' characters');
-    eb__383 = temper.list_tolistbuilder(this__107._errors__353);
-    temper.listbuilder_add(eb__383, ChangesetError(field__376.sqlValue, msg__382));
-    t_11 = this__107._tableDef__350;
-    t_12 = this__107._params__351;
-    t_13 = this__107._changes__352;
-    t_9 = temper.listbuilder_tolist(eb__383);
-    return__193 = ChangesetImpl__100(t_11, t_12, t_13, t_9, false);
+    local msg__422, eb__423;
+    msg__422 = temper.concat('must be between ', temper.int32_tostring(min__417), ' and ', temper.int32_tostring(max__418), ' characters');
+    eb__423 = temper.list_tolistbuilder(this__115._errors__393);
+    temper.listbuilder_add(eb__423, ChangesetError(field__416.sqlValue, msg__422));
+    t_11 = this__115._tableDef__390;
+    t_12 = this__115._params__391;
+    t_13 = this__115._changes__392;
+    t_9 = temper.listbuilder_tolist(eb__423);
+    return__211 = ChangesetImpl__108(t_11, t_12, t_13, t_9, false);
     goto break_2;
   end
-  return__193 = this__107;
-  ::break_2::return return__193;
+  return__211 = this__115;
+  ::break_2::return return__211;
 end;
-ChangesetImpl__100.methods.validateInt = function(this__108, field__385)
-  local return__194, t_14, t_15, t_16, t_17, t_18, val__387, parseOk__388, local_19, local_20, local_21;
+ChangesetImpl__108.methods.validateInt = function(this__116, field__425)
+  local return__212, t_14, t_15, t_16, t_17, t_18, val__427, parseOk__428, local_19, local_20, local_21;
   ::continue_5::
-  if not this__108._isValid__354 then
-    return__194 = this__108;
+  if not this__116._isValid__394 then
+    return__212 = this__116;
     goto break_4;
   end
-  t_14 = field__385.sqlValue;
-  val__387 = temper.mapped_getor(this__108._changes__352, t_14, '');
-  if temper.string_isempty(val__387) then
-    return__194 = this__108;
+  t_14 = field__425.sqlValue;
+  val__427 = temper.mapped_getor(this__116._changes__392, t_14, '');
+  if temper.string_isempty(val__427) then
+    return__212 = this__116;
     goto break_4;
   end
   local_19, local_20, local_21 = temper.pcall(function()
-    temper.string_toint32(val__387);
-    parseOk__388 = true;
+    temper.string_toint32(val__427);
+    parseOk__428 = true;
   end);
   if local_19 then
   else
-    parseOk__388 = false;
+    parseOk__428 = false;
   end
-  if not parseOk__388 then
-    local eb__389;
-    eb__389 = temper.list_tolistbuilder(this__108._errors__353);
-    temper.listbuilder_add(eb__389, ChangesetError(field__385.sqlValue, 'must be an integer'));
-    t_16 = this__108._tableDef__350;
-    t_17 = this__108._params__351;
-    t_18 = this__108._changes__352;
-    t_15 = temper.listbuilder_tolist(eb__389);
-    return__194 = ChangesetImpl__100(t_16, t_17, t_18, t_15, false);
+  if not parseOk__428 then
+    local eb__429;
+    eb__429 = temper.list_tolistbuilder(this__116._errors__393);
+    temper.listbuilder_add(eb__429, ChangesetError(field__425.sqlValue, 'must be an integer'));
+    t_16 = this__116._tableDef__390;
+    t_17 = this__116._params__391;
+    t_18 = this__116._changes__392;
+    t_15 = temper.listbuilder_tolist(eb__429);
+    return__212 = ChangesetImpl__108(t_16, t_17, t_18, t_15, false);
     goto break_4;
   end
-  return__194 = this__108;
-  ::break_4::return return__194;
+  return__212 = this__116;
+  ::break_4::return return__212;
 end;
-ChangesetImpl__100.methods.validateInt64 = function(this__109, field__391)
-  local return__195, t_23, t_24, t_25, t_26, t_27, val__393, parseOk__394, local_28, local_29, local_30;
+ChangesetImpl__108.methods.validateInt64 = function(this__117, field__431)
+  local return__213, t_23, t_24, t_25, t_26, t_27, val__433, parseOk__434, local_28, local_29, local_30;
   ::continue_7::
-  if not this__109._isValid__354 then
-    return__195 = this__109;
+  if not this__117._isValid__394 then
+    return__213 = this__117;
     goto break_6;
   end
-  t_23 = field__391.sqlValue;
-  val__393 = temper.mapped_getor(this__109._changes__352, t_23, '');
-  if temper.string_isempty(val__393) then
-    return__195 = this__109;
+  t_23 = field__431.sqlValue;
+  val__433 = temper.mapped_getor(this__117._changes__392, t_23, '');
+  if temper.string_isempty(val__433) then
+    return__213 = this__117;
     goto break_6;
   end
   local_28, local_29, local_30 = temper.pcall(function()
-    temper.string_toint64(val__393);
-    parseOk__394 = true;
+    temper.string_toint64(val__433);
+    parseOk__434 = true;
   end);
   if local_28 then
   else
-    parseOk__394 = false;
+    parseOk__434 = false;
   end
-  if not parseOk__394 then
-    local eb__395;
-    eb__395 = temper.list_tolistbuilder(this__109._errors__353);
-    temper.listbuilder_add(eb__395, ChangesetError(field__391.sqlValue, 'must be a 64-bit integer'));
-    t_25 = this__109._tableDef__350;
-    t_26 = this__109._params__351;
-    t_27 = this__109._changes__352;
-    t_24 = temper.listbuilder_tolist(eb__395);
-    return__195 = ChangesetImpl__100(t_25, t_26, t_27, t_24, false);
+  if not parseOk__434 then
+    local eb__435;
+    eb__435 = temper.list_tolistbuilder(this__117._errors__393);
+    temper.listbuilder_add(eb__435, ChangesetError(field__431.sqlValue, 'must be a 64-bit integer'));
+    t_25 = this__117._tableDef__390;
+    t_26 = this__117._params__391;
+    t_27 = this__117._changes__392;
+    t_24 = temper.listbuilder_tolist(eb__435);
+    return__213 = ChangesetImpl__108(t_25, t_26, t_27, t_24, false);
     goto break_6;
   end
-  return__195 = this__109;
-  ::break_6::return return__195;
+  return__213 = this__117;
+  ::break_6::return return__213;
 end;
-ChangesetImpl__100.methods.validateFloat = function(this__110, field__397)
-  local return__196, t_32, t_33, t_34, t_35, t_36, val__399, parseOk__400, local_37, local_38, local_39;
+ChangesetImpl__108.methods.validateFloat = function(this__118, field__437)
+  local return__214, t_32, t_33, t_34, t_35, t_36, val__439, parseOk__440, local_37, local_38, local_39;
   ::continue_9::
-  if not this__110._isValid__354 then
-    return__196 = this__110;
+  if not this__118._isValid__394 then
+    return__214 = this__118;
     goto break_8;
   end
-  t_32 = field__397.sqlValue;
-  val__399 = temper.mapped_getor(this__110._changes__352, t_32, '');
-  if temper.string_isempty(val__399) then
-    return__196 = this__110;
+  t_32 = field__437.sqlValue;
+  val__439 = temper.mapped_getor(this__118._changes__392, t_32, '');
+  if temper.string_isempty(val__439) then
+    return__214 = this__118;
     goto break_8;
   end
   local_37, local_38, local_39 = temper.pcall(function()
-    temper.string_tofloat64(val__399);
-    parseOk__400 = true;
+    temper.string_tofloat64(val__439);
+    parseOk__440 = true;
   end);
   if local_37 then
   else
-    parseOk__400 = false;
+    parseOk__440 = false;
   end
-  if not parseOk__400 then
-    local eb__401;
-    eb__401 = temper.list_tolistbuilder(this__110._errors__353);
-    temper.listbuilder_add(eb__401, ChangesetError(field__397.sqlValue, 'must be a number'));
-    t_34 = this__110._tableDef__350;
-    t_35 = this__110._params__351;
-    t_36 = this__110._changes__352;
-    t_33 = temper.listbuilder_tolist(eb__401);
-    return__196 = ChangesetImpl__100(t_34, t_35, t_36, t_33, false);
+  if not parseOk__440 then
+    local eb__441;
+    eb__441 = temper.list_tolistbuilder(this__118._errors__393);
+    temper.listbuilder_add(eb__441, ChangesetError(field__437.sqlValue, 'must be a number'));
+    t_34 = this__118._tableDef__390;
+    t_35 = this__118._params__391;
+    t_36 = this__118._changes__392;
+    t_33 = temper.listbuilder_tolist(eb__441);
+    return__214 = ChangesetImpl__108(t_34, t_35, t_36, t_33, false);
     goto break_8;
   end
-  return__196 = this__110;
-  ::break_8::return return__196;
+  return__214 = this__118;
+  ::break_8::return return__214;
 end;
-ChangesetImpl__100.methods.validateBool = function(this__111, field__403)
-  local return__197, t_41, t_42, t_43, t_44, t_45, t_46, t_47, t_48, t_49, t_50, val__405, isTrue__406, isFalse__407;
+ChangesetImpl__108.methods.validateBool = function(this__119, field__443)
+  local return__215, t_41, t_42, t_43, t_44, t_45, t_46, t_47, t_48, t_49, t_50, val__445, isTrue__446, isFalse__447;
   ::continue_11::
-  if not this__111._isValid__354 then
-    return__197 = this__111;
+  if not this__119._isValid__394 then
+    return__215 = this__119;
     goto break_10;
   end
-  t_41 = field__403.sqlValue;
-  val__405 = temper.mapped_getor(this__111._changes__352, t_41, '');
-  if temper.string_isempty(val__405) then
-    return__197 = this__111;
+  t_41 = field__443.sqlValue;
+  val__445 = temper.mapped_getor(this__119._changes__392, t_41, '');
+  if temper.string_isempty(val__445) then
+    return__215 = this__119;
     goto break_10;
   end
-  if temper.str_eq(val__405, 'true') then
-    isTrue__406 = true;
+  if temper.str_eq(val__445, 'true') then
+    isTrue__446 = true;
   else
-    if temper.str_eq(val__405, '1') then
+    if temper.str_eq(val__445, '1') then
       t_44 = true;
     else
-      if temper.str_eq(val__405, 'yes') then
+      if temper.str_eq(val__445, 'yes') then
         t_43 = true;
       else
-        t_43 = temper.str_eq(val__405, 'on');
+        t_43 = temper.str_eq(val__445, 'on');
       end
       t_44 = t_43;
     end
-    isTrue__406 = t_44;
+    isTrue__446 = t_44;
   end
-  if temper.str_eq(val__405, 'false') then
-    isFalse__407 = true;
+  if temper.str_eq(val__445, 'false') then
+    isFalse__447 = true;
   else
-    if temper.str_eq(val__405, '0') then
+    if temper.str_eq(val__445, '0') then
       t_46 = true;
     else
-      if temper.str_eq(val__405, 'no') then
+      if temper.str_eq(val__445, 'no') then
         t_45 = true;
       else
-        t_45 = temper.str_eq(val__405, 'off');
+        t_45 = temper.str_eq(val__445, 'off');
       end
       t_46 = t_45;
     end
-    isFalse__407 = t_46;
+    isFalse__447 = t_46;
   end
-  if not isTrue__406 then
-    t_47 = not isFalse__407;
+  if not isTrue__446 then
+    t_47 = not isFalse__447;
   else
     t_47 = false;
   end
   if t_47 then
-    local eb__408;
-    eb__408 = temper.list_tolistbuilder(this__111._errors__353);
-    temper.listbuilder_add(eb__408, ChangesetError(field__403.sqlValue, 'must be a boolean (true/false/1/0/yes/no/on/off)'));
-    t_48 = this__111._tableDef__350;
-    t_49 = this__111._params__351;
-    t_50 = this__111._changes__352;
-    t_42 = temper.listbuilder_tolist(eb__408);
-    return__197 = ChangesetImpl__100(t_48, t_49, t_50, t_42, false);
+    local eb__448;
+    eb__448 = temper.list_tolistbuilder(this__119._errors__393);
+    temper.listbuilder_add(eb__448, ChangesetError(field__443.sqlValue, 'must be a boolean (true/false/1/0/yes/no/on/off)'));
+    t_48 = this__119._tableDef__390;
+    t_49 = this__119._params__391;
+    t_50 = this__119._changes__392;
+    t_42 = temper.listbuilder_tolist(eb__448);
+    return__215 = ChangesetImpl__108(t_48, t_49, t_50, t_42, false);
     goto break_10;
   end
-  return__197 = this__111;
-  ::break_10::return return__197;
+  return__215 = this__119;
+  ::break_10::return return__215;
 end;
-ChangesetImpl__100.methods.parseBoolSqlPart = function(this__112, val__410)
-  local return__198, t_51, t_52, t_53, t_54, t_55, t_56;
+ChangesetImpl__108.methods.parseBoolSqlPart = function(this__120, val__450)
+  local return__216, t_51, t_52, t_53, t_54, t_55, t_56;
   ::continue_13::
-  if temper.str_eq(val__410, 'true') then
+  if temper.str_eq(val__450, 'true') then
     t_53 = true;
   else
-    if temper.str_eq(val__410, '1') then
+    if temper.str_eq(val__450, '1') then
       t_52 = true;
     else
-      if temper.str_eq(val__410, 'yes') then
+      if temper.str_eq(val__450, 'yes') then
         t_51 = true;
       else
-        t_51 = temper.str_eq(val__410, 'on');
+        t_51 = temper.str_eq(val__450, 'on');
       end
       t_52 = t_51;
     end
     t_53 = t_52;
   end
   if t_53 then
-    return__198 = SqlBoolean(true);
+    return__216 = SqlBoolean(true);
     goto break_12;
   end
-  if temper.str_eq(val__410, 'false') then
+  if temper.str_eq(val__450, 'false') then
     t_56 = true;
   else
-    if temper.str_eq(val__410, '0') then
+    if temper.str_eq(val__450, '0') then
       t_55 = true;
     else
-      if temper.str_eq(val__410, 'no') then
+      if temper.str_eq(val__450, 'no') then
         t_54 = true;
       else
-        t_54 = temper.str_eq(val__410, 'off');
+        t_54 = temper.str_eq(val__450, 'off');
       end
       t_55 = t_54;
     end
     t_56 = t_55;
   end
   if t_56 then
-    return__198 = SqlBoolean(false);
+    return__216 = SqlBoolean(false);
     goto break_12;
   end
   temper.bubble();
-  ::break_12::return return__198;
+  ::break_12::return return__216;
 end;
-ChangesetImpl__100.methods.valueToSqlPart = function(this__113, fieldDef__413, val__414)
-  local return__199, t_57, t_58, t_59, t_60, ft__416;
-  ::continue_15::ft__416 = fieldDef__413.fieldType;
-  if temper.instance_of(ft__416, StringField) then
-    return__199 = SqlString(val__414);
+ChangesetImpl__108.methods.valueToSqlPart = function(this__121, fieldDef__453, val__454)
+  local return__217, t_57, t_58, t_59, t_60, ft__456;
+  ::continue_15::ft__456 = fieldDef__453.fieldType;
+  if temper.instance_of(ft__456, StringField) then
+    return__217 = SqlString(val__454);
     goto break_14;
   end
-  if temper.instance_of(ft__416, IntField) then
-    t_57 = temper.string_toint32(val__414);
-    return__199 = SqlInt32(t_57);
+  if temper.instance_of(ft__456, IntField) then
+    t_57 = temper.string_toint32(val__454);
+    return__217 = SqlInt32(t_57);
     goto break_14;
   end
-  if temper.instance_of(ft__416, Int64Field) then
-    t_58 = temper.string_toint64(val__414);
-    return__199 = SqlInt64(t_58);
+  if temper.instance_of(ft__456, Int64Field) then
+    t_58 = temper.string_toint64(val__454);
+    return__217 = SqlInt64(t_58);
     goto break_14;
   end
-  if temper.instance_of(ft__416, FloatField) then
-    t_59 = temper.string_tofloat64(val__414);
-    return__199 = SqlFloat64(t_59);
+  if temper.instance_of(ft__456, FloatField) then
+    t_59 = temper.string_tofloat64(val__454);
+    return__217 = SqlFloat64(t_59);
     goto break_14;
   end
-  if temper.instance_of(ft__416, BoolField) then
-    return__199 = this__113:parseBoolSqlPart(val__414);
+  if temper.instance_of(ft__456, BoolField) then
+    return__217 = this__121:parseBoolSqlPart(val__454);
     goto break_14;
   end
-  if temper.instance_of(ft__416, DateField) then
-    t_60 = temper.date_fromisostring(val__414);
-    return__199 = SqlDate(t_60);
+  if temper.instance_of(ft__456, DateField) then
+    t_60 = temper.date_fromisostring(val__454);
+    return__217 = SqlDate(t_60);
     goto break_14;
   end
   temper.bubble();
-  ::break_14::return return__199;
+  ::break_14::return return__217;
 end;
-ChangesetImpl__100.methods.toInsertSql = function(this__114)
-  local t_61, t_62, t_63, t_64, t_65, t_66, t_67, t_68, t_69, t_70, i__419, pairs__421, colNames__422, valParts__423, i__424, b__427, t_71, fn__4895, j__429;
-  if not this__114._isValid__354 then
+ChangesetImpl__108.methods.toInsertSql = function(this__122)
+  local t_61, t_62, t_63, t_64, t_65, t_66, t_67, t_68, t_69, t_70, i__459, pairs__461, colNames__462, valParts__463, i__464, b__467, t_71, fn__5581, j__469;
+  if not this__122._isValid__394 then
     temper.bubble();
   end
-  i__419 = 0;
+  i__459 = 0;
   while true do
-    local f__420;
-    t_61 = temper.list_length(this__114._tableDef__350.fields);
-    if not (i__419 < t_61) then
+    local f__460;
+    t_61 = temper.list_length(this__122._tableDef__390.fields);
+    if not (i__459 < t_61) then
       break;
     end
-    f__420 = temper.list_get(this__114._tableDef__350.fields, i__419);
-    if not f__420.nullable then
-      t_62 = f__420.name.sqlValue;
-      t_63 = temper.mapped_has(this__114._changes__352, t_62);
+    f__460 = temper.list_get(this__122._tableDef__390.fields, i__459);
+    if not f__460.nullable then
+      t_62 = f__460.name.sqlValue;
+      t_63 = temper.mapped_has(this__122._changes__392, t_62);
       t_68 = not t_63;
     else
       t_68 = false;
@@ -406,733 +406,839 @@ ChangesetImpl__100.methods.toInsertSql = function(this__114)
     if t_68 then
       temper.bubble();
     end
-    i__419 = temper.int32_add(i__419, 1);
+    i__459 = temper.int32_add(i__459, 1);
   end
-  pairs__421 = temper.mapped_tolist(this__114._changes__352);
-  if (temper.list_length(pairs__421) == 0) then
+  pairs__461 = temper.mapped_tolist(this__122._changes__392);
+  if (temper.list_length(pairs__461) == 0) then
     temper.bubble();
   end
-  colNames__422 = temper.listbuilder_constructor();
-  valParts__423 = temper.listbuilder_constructor();
-  i__424 = 0;
+  colNames__462 = temper.listbuilder_constructor();
+  valParts__463 = temper.listbuilder_constructor();
+  i__464 = 0;
   while true do
-    local pair__425, fd__426;
-    t_64 = temper.list_length(pairs__421);
-    if not (i__424 < t_64) then
+    local pair__465, fd__466;
+    t_64 = temper.list_length(pairs__461);
+    if not (i__464 < t_64) then
       break;
     end
-    pair__425 = temper.list_get(pairs__421, i__424);
-    t_65 = pair__425.key;
-    t_69 = this__114._tableDef__350:field(t_65);
-    fd__426 = t_69;
-    temper.listbuilder_add(colNames__422, fd__426.name.sqlValue);
-    t_66 = pair__425.value;
-    t_70 = this__114:valueToSqlPart(fd__426, t_66);
-    temper.listbuilder_add(valParts__423, t_70);
-    i__424 = temper.int32_add(i__424, 1);
+    pair__465 = temper.list_get(pairs__461, i__464);
+    t_65 = pair__465.key;
+    t_69 = this__122._tableDef__390:field(t_65);
+    fd__466 = t_69;
+    temper.listbuilder_add(colNames__462, fd__466.name.sqlValue);
+    t_66 = pair__465.value;
+    t_70 = this__122:valueToSqlPart(fd__466, t_66);
+    temper.listbuilder_add(valParts__463, t_70);
+    i__464 = temper.int32_add(i__464, 1);
   end
-  b__427 = SqlBuilder();
-  b__427:appendSafe('INSERT INTO ');
-  b__427:appendSafe(this__114._tableDef__350.tableName.sqlValue);
-  b__427:appendSafe(' (');
-  t_71 = temper.listbuilder_tolist(colNames__422);
-  fn__4895 = function(c__428)
-    return c__428;
+  b__467 = SqlBuilder();
+  b__467:appendSafe('INSERT INTO ');
+  b__467:appendSafe(this__122._tableDef__390.tableName.sqlValue);
+  b__467:appendSafe(' (');
+  t_71 = temper.listbuilder_tolist(colNames__462);
+  fn__5581 = function(c__468)
+    return c__468;
   end;
-  b__427:appendSafe(temper.listed_join(t_71, ', ', fn__4895));
-  b__427:appendSafe(') VALUES (');
-  b__427:appendPart(temper.listed_get(valParts__423, 0));
-  j__429 = 1;
+  b__467:appendSafe(temper.listed_join(t_71, ', ', fn__5581));
+  b__467:appendSafe(') VALUES (');
+  b__467:appendPart(temper.listed_get(valParts__463, 0));
+  j__469 = 1;
   while true do
-    t_67 = temper.listbuilder_length(valParts__423);
-    if not (j__429 < t_67) then
+    t_67 = temper.listbuilder_length(valParts__463);
+    if not (j__469 < t_67) then
       break;
     end
-    b__427:appendSafe(', ');
-    b__427:appendPart(temper.listed_get(valParts__423, j__429));
-    j__429 = temper.int32_add(j__429, 1);
+    b__467:appendSafe(', ');
+    b__467:appendPart(temper.listed_get(valParts__463, j__469));
+    j__469 = temper.int32_add(j__469, 1);
   end
-  b__427:appendSafe(')');
-  return b__427.accumulated;
+  b__467:appendSafe(')');
+  return b__467.accumulated;
 end;
-ChangesetImpl__100.methods.toUpdateSql = function(this__115, id__431)
-  local t_72, t_73, t_74, t_75, t_76, pairs__433, b__434, i__435;
-  if not this__115._isValid__354 then
+ChangesetImpl__108.methods.toUpdateSql = function(this__123, id__471)
+  local t_72, t_73, t_74, t_75, t_76, pairs__473, b__474, i__475;
+  if not this__123._isValid__394 then
     temper.bubble();
   end
-  pairs__433 = temper.mapped_tolist(this__115._changes__352);
-  if (temper.list_length(pairs__433) == 0) then
+  pairs__473 = temper.mapped_tolist(this__123._changes__392);
+  if (temper.list_length(pairs__473) == 0) then
     temper.bubble();
   end
-  b__434 = SqlBuilder();
-  b__434:appendSafe('UPDATE ');
-  b__434:appendSafe(this__115._tableDef__350.tableName.sqlValue);
-  b__434:appendSafe(' SET ');
-  i__435 = 0;
+  b__474 = SqlBuilder();
+  b__474:appendSafe('UPDATE ');
+  b__474:appendSafe(this__123._tableDef__390.tableName.sqlValue);
+  b__474:appendSafe(' SET ');
+  i__475 = 0;
   while true do
-    local pair__436, fd__437;
-    t_72 = temper.list_length(pairs__433);
-    if not (i__435 < t_72) then
+    local pair__476, fd__477;
+    t_72 = temper.list_length(pairs__473);
+    if not (i__475 < t_72) then
       break;
     end
-    if (i__435 > 0) then
-      b__434:appendSafe(', ');
+    if (i__475 > 0) then
+      b__474:appendSafe(', ');
     end
-    pair__436 = temper.list_get(pairs__433, i__435);
-    t_73 = pair__436.key;
-    t_75 = this__115._tableDef__350:field(t_73);
-    fd__437 = t_75;
-    b__434:appendSafe(fd__437.name.sqlValue);
-    b__434:appendSafe(' = ');
-    t_74 = pair__436.value;
-    t_76 = this__115:valueToSqlPart(fd__437, t_74);
-    b__434:appendPart(t_76);
-    i__435 = temper.int32_add(i__435, 1);
+    pair__476 = temper.list_get(pairs__473, i__475);
+    t_73 = pair__476.key;
+    t_75 = this__123._tableDef__390:field(t_73);
+    fd__477 = t_75;
+    b__474:appendSafe(fd__477.name.sqlValue);
+    b__474:appendSafe(' = ');
+    t_74 = pair__476.value;
+    t_76 = this__123:valueToSqlPart(fd__477, t_74);
+    b__474:appendPart(t_76);
+    i__475 = temper.int32_add(i__475, 1);
   end
-  b__434:appendSafe(' WHERE id = ');
-  b__434:appendInt32(id__431);
-  return b__434.accumulated;
+  b__474:appendSafe(' WHERE id = ');
+  b__474:appendInt32(id__471);
+  return b__474.accumulated;
 end;
-ChangesetImpl__100.constructor = function(this__182, _tableDef__439, _params__440, _changes__441, _errors__442, _isValid__443)
-  this__182._tableDef__350 = _tableDef__439;
-  this__182._params__351 = _params__440;
-  this__182._changes__352 = _changes__441;
-  this__182._errors__353 = _errors__442;
-  this__182._isValid__354 = _isValid__443;
+ChangesetImpl__108.constructor = function(this__200, _tableDef__479, _params__480, _changes__481, _errors__482, _isValid__483)
+  this__200._tableDef__390 = _tableDef__479;
+  this__200._params__391 = _params__480;
+  this__200._changes__392 = _changes__481;
+  this__200._errors__393 = _errors__482;
+  this__200._isValid__394 = _isValid__483;
   return nil;
 end;
-OrderClause = temper.type('OrderClause');
-OrderClause.constructor = function(this__206, field__541, ascending__542)
-  this__206.field__538 = field__541;
-  this__206.ascending__539 = ascending__542;
-  return nil;
-end;
-OrderClause.get.field = function(this__932)
-  return this__932.field__538;
-end;
-OrderClause.get.ascending = function(this__935)
-  return this__935.ascending__539;
-end;
-Query = temper.type('Query');
-Query.methods.where = function(this__116, condition__550)
-  local nb__552;
-  nb__552 = temper.list_tolistbuilder(this__116.conditions__544);
-  temper.listbuilder_add(nb__552, condition__550);
-  return Query(this__116.tableName__543, temper.listbuilder_tolist(nb__552), this__116.selectedFields__545, this__116.orderClauses__546, this__116.limitVal__547, this__116.offsetVal__548);
-end;
-Query.methods.select = function(this__117, fields__554)
-  return Query(this__117.tableName__543, this__117.conditions__544, fields__554, this__117.orderClauses__546, this__117.limitVal__547, this__117.offsetVal__548);
-end;
-Query.methods.orderBy = function(this__118, field__557, ascending__558)
-  local nb__560;
-  nb__560 = temper.list_tolistbuilder(this__118.orderClauses__546);
-  temper.listbuilder_add(nb__560, OrderClause(field__557, ascending__558));
-  return Query(this__118.tableName__543, this__118.conditions__544, this__118.selectedFields__545, temper.listbuilder_tolist(nb__560), this__118.limitVal__547, this__118.offsetVal__548);
-end;
-Query.methods.limit = function(this__119, n__562)
-  if (n__562 < 0) then
-    temper.bubble();
-  end
-  return Query(this__119.tableName__543, this__119.conditions__544, this__119.selectedFields__545, this__119.orderClauses__546, n__562, this__119.offsetVal__548);
-end;
-Query.methods.offset = function(this__120, n__565)
-  if (n__565 < 0) then
-    temper.bubble();
-  end
-  return Query(this__120.tableName__543, this__120.conditions__544, this__120.selectedFields__545, this__120.orderClauses__546, this__120.limitVal__547, n__565);
-end;
-Query.methods.toSql = function(this__121)
-  local t_77, b__569, lv__574, ov__575;
-  b__569 = SqlBuilder();
-  b__569:appendSafe('SELECT ');
-  if temper.listed_isempty(this__121.selectedFields__545) then
-    b__569:appendSafe('*');
-  else
-    local fn__4451;
-    fn__4451 = function(f__570)
-      return f__570.sqlValue;
-    end;
-    b__569:appendSafe(temper.listed_join(this__121.selectedFields__545, ', ', fn__4451));
-  end
-  b__569:appendSafe(' FROM ');
-  b__569:appendSafe(this__121.tableName__543.sqlValue);
-  if not temper.listed_isempty(this__121.conditions__544) then
-    local i__571;
-    b__569:appendSafe(' WHERE ');
-    b__569:appendFragment(temper.list_get(this__121.conditions__544, 0));
-    i__571 = 1;
-    while true do
-      t_77 = temper.list_length(this__121.conditions__544);
-      if not (i__571 < t_77) then
-        break;
-      end
-      b__569:appendSafe(' AND ');
-      b__569:appendFragment(temper.list_get(this__121.conditions__544, i__571));
-      i__571 = temper.int32_add(i__571, 1);
-    end
-  end
-  if not temper.listed_isempty(this__121.orderClauses__546) then
-    local first__572, fn__4450;
-    b__569:appendSafe(' ORDER BY ');
-    first__572 = true;
-    fn__4450 = function(oc__573)
-      local t_78, t_79;
-      if not first__572 then
-        b__569:appendSafe(', ');
-      end
-      first__572 = false;
-      t_79 = oc__573.field.sqlValue;
-      b__569:appendSafe(t_79);
-      if oc__573.ascending then
-        t_78 = ' ASC';
-      else
-        t_78 = ' DESC';
-      end
-      b__569:appendSafe(t_78);
-      return nil;
-    end;
-    temper.list_foreach(this__121.orderClauses__546, fn__4450);
-  end
-  lv__574 = this__121.limitVal__547;
-  if not temper.is_null(lv__574) then
-    local lv_80;
-    lv_80 = lv__574;
-    b__569:appendSafe(' LIMIT ');
-    b__569:appendInt32(lv_80);
-  end
-  ov__575 = this__121.offsetVal__548;
-  if not temper.is_null(ov__575) then
-    local ov_81;
-    ov_81 = ov__575;
-    b__569:appendSafe(' OFFSET ');
-    b__569:appendInt32(ov_81);
-  end
-  return b__569.accumulated;
-end;
-Query.methods.safeToSql = function(this__122, defaultLimit__577)
-  local return__221, t_82;
-  if (defaultLimit__577 < 0) then
-    temper.bubble();
-  end
-  if not temper.is_null(this__122.limitVal__547) then
-    return__221 = this__122:toSql();
-  else
-    t_82 = this__122:limit(defaultLimit__577);
-    return__221 = t_82:toSql();
-  end
-  return return__221;
-end;
-Query.constructor = function(this__208, tableName__580, conditions__581, selectedFields__582, orderClauses__583, limitVal__584, offsetVal__585)
-  if (limitVal__584 == nil) then
-    limitVal__584 = temper.null;
-  end
-  if (offsetVal__585 == nil) then
-    offsetVal__585 = temper.null;
-  end
-  this__208.tableName__543 = tableName__580;
-  this__208.conditions__544 = conditions__581;
-  this__208.selectedFields__545 = selectedFields__582;
-  this__208.orderClauses__546 = orderClauses__583;
-  this__208.limitVal__547 = limitVal__584;
-  this__208.offsetVal__548 = offsetVal__585;
-  return nil;
-end;
-Query.get.tableName = function(this__938)
-  return this__938.tableName__543;
-end;
-Query.get.conditions = function(this__941)
-  return this__941.conditions__544;
-end;
-Query.get.selectedFields = function(this__944)
-  return this__944.selectedFields__545;
-end;
-Query.get.orderClauses = function(this__947)
-  return this__947.orderClauses__546;
-end;
-Query.get.limitVal = function(this__950)
-  return this__950.limitVal__547;
-end;
-Query.get.offsetVal = function(this__953)
-  return this__953.offsetVal__548;
-end;
-SafeIdentifier = temper.type('SafeIdentifier');
-SafeIdentifier.get.sqlValue = function(this__123)
+JoinType = temper.type('JoinType');
+JoinType.methods.keyword = function(this__124)
   temper.virtual();
 end;
-ValidatedIdentifier__124 = temper.type('ValidatedIdentifier__124', SafeIdentifier);
-ValidatedIdentifier__124.get.sqlValue = function(this__125)
-  return this__125._value__630;
+InnerJoin = temper.type('InnerJoin', JoinType);
+InnerJoin.methods.keyword = function(this__125)
+  return 'INNER JOIN';
 end;
-ValidatedIdentifier__124.constructor = function(this__227, _value__634)
-  this__227._value__630 = _value__634;
+InnerJoin.constructor = function(this__225)
+  return nil;
+end;
+LeftJoin = temper.type('LeftJoin', JoinType);
+LeftJoin.methods.keyword = function(this__126)
+  return 'LEFT JOIN';
+end;
+LeftJoin.constructor = function(this__228)
+  return nil;
+end;
+RightJoin = temper.type('RightJoin', JoinType);
+RightJoin.methods.keyword = function(this__127)
+  return 'RIGHT JOIN';
+end;
+RightJoin.constructor = function(this__231)
+  return nil;
+end;
+FullJoin = temper.type('FullJoin', JoinType);
+FullJoin.methods.keyword = function(this__128)
+  return 'FULL OUTER JOIN';
+end;
+FullJoin.constructor = function(this__234)
+  return nil;
+end;
+JoinClause = temper.type('JoinClause');
+JoinClause.constructor = function(this__237, joinType__596, table__597, onCondition__598)
+  this__237.joinType__592 = joinType__596;
+  this__237.table__593 = table__597;
+  this__237.onCondition__594 = onCondition__598;
+  return nil;
+end;
+JoinClause.get.joinType = function(this__1044)
+  return this__1044.joinType__592;
+end;
+JoinClause.get.table = function(this__1047)
+  return this__1047.table__593;
+end;
+JoinClause.get.onCondition = function(this__1050)
+  return this__1050.onCondition__594;
+end;
+OrderClause = temper.type('OrderClause');
+OrderClause.constructor = function(this__239, field__602, ascending__603)
+  this__239.field__599 = field__602;
+  this__239.ascending__600 = ascending__603;
+  return nil;
+end;
+OrderClause.get.field = function(this__1053)
+  return this__1053.field__599;
+end;
+OrderClause.get.ascending = function(this__1056)
+  return this__1056.ascending__600;
+end;
+Query = temper.type('Query');
+Query.methods.where = function(this__129, condition__612)
+  local nb__614;
+  nb__614 = temper.list_tolistbuilder(this__129.conditions__605);
+  temper.listbuilder_add(nb__614, condition__612);
+  return Query(this__129.tableName__604, temper.listbuilder_tolist(nb__614), this__129.selectedFields__606, this__129.orderClauses__607, this__129.limitVal__608, this__129.offsetVal__609, this__129.joinClauses__610);
+end;
+Query.methods.select = function(this__130, fields__616)
+  return Query(this__130.tableName__604, this__130.conditions__605, fields__616, this__130.orderClauses__607, this__130.limitVal__608, this__130.offsetVal__609, this__130.joinClauses__610);
+end;
+Query.methods.orderBy = function(this__131, field__619, ascending__620)
+  local nb__622;
+  nb__622 = temper.list_tolistbuilder(this__131.orderClauses__607);
+  temper.listbuilder_add(nb__622, OrderClause(field__619, ascending__620));
+  return Query(this__131.tableName__604, this__131.conditions__605, this__131.selectedFields__606, temper.listbuilder_tolist(nb__622), this__131.limitVal__608, this__131.offsetVal__609, this__131.joinClauses__610);
+end;
+Query.methods.limit = function(this__132, n__624)
+  if (n__624 < 0) then
+    temper.bubble();
+  end
+  return Query(this__132.tableName__604, this__132.conditions__605, this__132.selectedFields__606, this__132.orderClauses__607, n__624, this__132.offsetVal__609, this__132.joinClauses__610);
+end;
+Query.methods.offset = function(this__133, n__627)
+  if (n__627 < 0) then
+    temper.bubble();
+  end
+  return Query(this__133.tableName__604, this__133.conditions__605, this__133.selectedFields__606, this__133.orderClauses__607, this__133.limitVal__608, n__627, this__133.joinClauses__610);
+end;
+Query.methods.join = function(this__134, joinType__630, table__631, onCondition__632)
+  local nb__634;
+  nb__634 = temper.list_tolistbuilder(this__134.joinClauses__610);
+  temper.listbuilder_add(nb__634, JoinClause(joinType__630, table__631, onCondition__632));
+  return Query(this__134.tableName__604, this__134.conditions__605, this__134.selectedFields__606, this__134.orderClauses__607, this__134.limitVal__608, this__134.offsetVal__609, temper.listbuilder_tolist(nb__634));
+end;
+Query.methods.innerJoin = function(this__135, table__636, onCondition__637)
+  local t_77;
+  t_77 = InnerJoin();
+  return this__135:join(t_77, table__636, onCondition__637);
+end;
+Query.methods.leftJoin = function(this__136, table__640, onCondition__641)
+  local t_78;
+  t_78 = LeftJoin();
+  return this__136:join(t_78, table__640, onCondition__641);
+end;
+Query.methods.rightJoin = function(this__137, table__644, onCondition__645)
+  local t_79;
+  t_79 = RightJoin();
+  return this__137:join(t_79, table__644, onCondition__645);
+end;
+Query.methods.fullJoin = function(this__138, table__648, onCondition__649)
+  local t_80;
+  t_80 = FullJoin();
+  return this__138:join(t_80, table__648, onCondition__649);
+end;
+Query.methods.toSql = function(this__139)
+  local t_81, b__653, fn__5115, lv__659, ov__660;
+  b__653 = SqlBuilder();
+  b__653:appendSafe('SELECT ');
+  if temper.listed_isempty(this__139.selectedFields__606) then
+    b__653:appendSafe('*');
+  else
+    local fn__5116;
+    fn__5116 = function(f__654)
+      return f__654.sqlValue;
+    end;
+    b__653:appendSafe(temper.listed_join(this__139.selectedFields__606, ', ', fn__5116));
+  end
+  b__653:appendSafe(' FROM ');
+  b__653:appendSafe(this__139.tableName__604.sqlValue);
+  fn__5115 = function(jc__655)
+    local t_82, t_83, t_84;
+    b__653:appendSafe(' ');
+    t_82 = jc__655.joinType:keyword();
+    b__653:appendSafe(t_82);
+    b__653:appendSafe(' ');
+    t_83 = jc__655.table.sqlValue;
+    b__653:appendSafe(t_83);
+    b__653:appendSafe(' ON ');
+    t_84 = jc__655.onCondition;
+    b__653:appendFragment(t_84);
+    return nil;
+  end;
+  temper.list_foreach(this__139.joinClauses__610, fn__5115);
+  if not temper.listed_isempty(this__139.conditions__605) then
+    local i__656;
+    b__653:appendSafe(' WHERE ');
+    b__653:appendFragment(temper.list_get(this__139.conditions__605, 0));
+    i__656 = 1;
+    while true do
+      t_81 = temper.list_length(this__139.conditions__605);
+      if not (i__656 < t_81) then
+        break;
+      end
+      b__653:appendSafe(' AND ');
+      b__653:appendFragment(temper.list_get(this__139.conditions__605, i__656));
+      i__656 = temper.int32_add(i__656, 1);
+    end
+  end
+  if not temper.listed_isempty(this__139.orderClauses__607) then
+    local first__657, fn__5114;
+    b__653:appendSafe(' ORDER BY ');
+    first__657 = true;
+    fn__5114 = function(oc__658)
+      local t_85, t_86;
+      if not first__657 then
+        b__653:appendSafe(', ');
+      end
+      first__657 = false;
+      t_86 = oc__658.field.sqlValue;
+      b__653:appendSafe(t_86);
+      if oc__658.ascending then
+        t_85 = ' ASC';
+      else
+        t_85 = ' DESC';
+      end
+      b__653:appendSafe(t_85);
+      return nil;
+    end;
+    temper.list_foreach(this__139.orderClauses__607, fn__5114);
+  end
+  lv__659 = this__139.limitVal__608;
+  if not temper.is_null(lv__659) then
+    local lv_87;
+    lv_87 = lv__659;
+    b__653:appendSafe(' LIMIT ');
+    b__653:appendInt32(lv_87);
+  end
+  ov__660 = this__139.offsetVal__609;
+  if not temper.is_null(ov__660) then
+    local ov_88;
+    ov_88 = ov__660;
+    b__653:appendSafe(' OFFSET ');
+    b__653:appendInt32(ov_88);
+  end
+  return b__653.accumulated;
+end;
+Query.methods.safeToSql = function(this__140, defaultLimit__662)
+  local return__260, t_89;
+  if (defaultLimit__662 < 0) then
+    temper.bubble();
+  end
+  if not temper.is_null(this__140.limitVal__608) then
+    return__260 = this__140:toSql();
+  else
+    t_89 = this__140:limit(defaultLimit__662);
+    return__260 = t_89:toSql();
+  end
+  return return__260;
+end;
+Query.constructor = function(this__241, tableName__665, conditions__666, selectedFields__667, orderClauses__668, limitVal__669, offsetVal__670, joinClauses__671)
+  if (limitVal__669 == nil) then
+    limitVal__669 = temper.null;
+  end
+  if (offsetVal__670 == nil) then
+    offsetVal__670 = temper.null;
+  end
+  this__241.tableName__604 = tableName__665;
+  this__241.conditions__605 = conditions__666;
+  this__241.selectedFields__606 = selectedFields__667;
+  this__241.orderClauses__607 = orderClauses__668;
+  this__241.limitVal__608 = limitVal__669;
+  this__241.offsetVal__609 = offsetVal__670;
+  this__241.joinClauses__610 = joinClauses__671;
+  return nil;
+end;
+Query.get.tableName = function(this__1059)
+  return this__1059.tableName__604;
+end;
+Query.get.conditions = function(this__1062)
+  return this__1062.conditions__605;
+end;
+Query.get.selectedFields = function(this__1065)
+  return this__1065.selectedFields__606;
+end;
+Query.get.orderClauses = function(this__1068)
+  return this__1068.orderClauses__607;
+end;
+Query.get.limitVal = function(this__1071)
+  return this__1071.limitVal__608;
+end;
+Query.get.offsetVal = function(this__1074)
+  return this__1074.offsetVal__609;
+end;
+Query.get.joinClauses = function(this__1077)
+  return this__1077.joinClauses__610;
+end;
+SafeIdentifier = temper.type('SafeIdentifier');
+SafeIdentifier.get.sqlValue = function(this__141)
+  temper.virtual();
+end;
+ValidatedIdentifier__142 = temper.type('ValidatedIdentifier__142', SafeIdentifier);
+ValidatedIdentifier__142.get.sqlValue = function(this__143)
+  return this__143._value__738;
+end;
+ValidatedIdentifier__142.constructor = function(this__267, _value__742)
+  this__267._value__738 = _value__742;
   return nil;
 end;
 FieldType = temper.type('FieldType');
 StringField = temper.type('StringField', FieldType);
-StringField.constructor = function(this__233)
+StringField.constructor = function(this__273)
   return nil;
 end;
 IntField = temper.type('IntField', FieldType);
-IntField.constructor = function(this__235)
+IntField.constructor = function(this__275)
   return nil;
 end;
 Int64Field = temper.type('Int64Field', FieldType);
-Int64Field.constructor = function(this__237)
+Int64Field.constructor = function(this__277)
   return nil;
 end;
 FloatField = temper.type('FloatField', FieldType);
-FloatField.constructor = function(this__239)
+FloatField.constructor = function(this__279)
   return nil;
 end;
 BoolField = temper.type('BoolField', FieldType);
-BoolField.constructor = function(this__241)
+BoolField.constructor = function(this__281)
   return nil;
 end;
 DateField = temper.type('DateField', FieldType);
-DateField.constructor = function(this__243)
+DateField.constructor = function(this__283)
   return nil;
 end;
 FieldDef = temper.type('FieldDef');
-FieldDef.constructor = function(this__245, name__652, fieldType__653, nullable__654)
-  this__245.name__648 = name__652;
-  this__245.fieldType__649 = fieldType__653;
-  this__245.nullable__650 = nullable__654;
+FieldDef.constructor = function(this__285, name__760, fieldType__761, nullable__762)
+  this__285.name__756 = name__760;
+  this__285.fieldType__757 = fieldType__761;
+  this__285.nullable__758 = nullable__762;
   return nil;
 end;
-FieldDef.get.name = function(this__870)
-  return this__870.name__648;
+FieldDef.get.name = function(this__982)
+  return this__982.name__756;
 end;
-FieldDef.get.fieldType = function(this__873)
-  return this__873.fieldType__649;
+FieldDef.get.fieldType = function(this__985)
+  return this__985.fieldType__757;
 end;
-FieldDef.get.nullable = function(this__876)
-  return this__876.nullable__650;
+FieldDef.get.nullable = function(this__988)
+  return this__988.nullable__758;
 end;
 TableDef = temper.type('TableDef');
-TableDef.methods.field = function(this__126, name__658)
-  local return__250, this__3156, n__3157, i__3158;
-  ::continue_17::this__3156 = this__126.fields__656;
-  n__3157 = temper.list_length(this__3156);
-  i__3158 = 0;
-  while (i__3158 < n__3157) do
-    local el__3159, f__660;
-    el__3159 = temper.list_get(this__3156, i__3158);
-    i__3158 = temper.int32_add(i__3158, 1);
-    f__660 = el__3159;
-    if temper.str_eq(f__660.name.sqlValue, name__658) then
-      return__250 = f__660;
+TableDef.methods.field = function(this__144, name__766)
+  local return__290, this__3570, n__3571, i__3572;
+  ::continue_17::this__3570 = this__144.fields__764;
+  n__3571 = temper.list_length(this__3570);
+  i__3572 = 0;
+  while (i__3572 < n__3571) do
+    local el__3573, f__768;
+    el__3573 = temper.list_get(this__3570, i__3572);
+    i__3572 = temper.int32_add(i__3572, 1);
+    f__768 = el__3573;
+    if temper.str_eq(f__768.name.sqlValue, name__766) then
+      return__290 = f__768;
       goto break_16;
     end
   end
   temper.bubble();
-  ::break_16::return return__250;
+  ::break_16::return return__290;
 end;
-TableDef.constructor = function(this__247, tableName__662, fields__663)
-  this__247.tableName__655 = tableName__662;
-  this__247.fields__656 = fields__663;
+TableDef.constructor = function(this__287, tableName__770, fields__771)
+  this__287.tableName__763 = tableName__770;
+  this__287.fields__764 = fields__771;
   return nil;
 end;
-TableDef.get.tableName = function(this__879)
-  return this__879.tableName__655;
+TableDef.get.tableName = function(this__991)
+  return this__991.tableName__763;
 end;
-TableDef.get.fields = function(this__882)
-  return this__882.fields__656;
+TableDef.get.fields = function(this__994)
+  return this__994.fields__764;
 end;
 SqlBuilder = temper.type('SqlBuilder');
-SqlBuilder.methods.appendSafe = function(this__127, sqlSource__685)
-  local t_83;
-  t_83 = SqlSource(sqlSource__685);
-  temper.listbuilder_add(this__127.buffer__683, t_83);
-  return nil;
-end;
-SqlBuilder.methods.appendFragment = function(this__128, fragment__688)
-  local t_84;
-  t_84 = fragment__688.parts;
-  temper.listbuilder_addall(this__128.buffer__683, t_84);
-  return nil;
-end;
-SqlBuilder.methods.appendPart = function(this__129, part__691)
-  temper.listbuilder_add(this__129.buffer__683, part__691);
-  return nil;
-end;
-SqlBuilder.methods.appendPartList = function(this__130, values__694)
-  local fn__5066;
-  fn__5066 = function(x__696)
-    this__130:appendPart(x__696);
-    return nil;
-  end;
-  this__130:appendList(values__694, fn__5066);
-  return nil;
-end;
-SqlBuilder.methods.appendBoolean = function(this__131, value__698)
-  local t_85;
-  t_85 = SqlBoolean(value__698);
-  temper.listbuilder_add(this__131.buffer__683, t_85);
-  return nil;
-end;
-SqlBuilder.methods.appendBooleanList = function(this__132, values__701)
-  local fn__5060;
-  fn__5060 = function(x__703)
-    this__132:appendBoolean(x__703);
-    return nil;
-  end;
-  this__132:appendList(values__701, fn__5060);
-  return nil;
-end;
-SqlBuilder.methods.appendDate = function(this__133, value__705)
-  local t_86;
-  t_86 = SqlDate(value__705);
-  temper.listbuilder_add(this__133.buffer__683, t_86);
-  return nil;
-end;
-SqlBuilder.methods.appendDateList = function(this__134, values__708)
-  local fn__5054;
-  fn__5054 = function(x__710)
-    this__134:appendDate(x__710);
-    return nil;
-  end;
-  this__134:appendList(values__708, fn__5054);
-  return nil;
-end;
-SqlBuilder.methods.appendFloat64 = function(this__135, value__712)
-  local t_87;
-  t_87 = SqlFloat64(value__712);
-  temper.listbuilder_add(this__135.buffer__683, t_87);
-  return nil;
-end;
-SqlBuilder.methods.appendFloat64List = function(this__136, values__715)
-  local fn__5048;
-  fn__5048 = function(x__717)
-    this__136:appendFloat64(x__717);
-    return nil;
-  end;
-  this__136:appendList(values__715, fn__5048);
-  return nil;
-end;
-SqlBuilder.methods.appendInt32 = function(this__137, value__719)
-  local t_88;
-  t_88 = SqlInt32(value__719);
-  temper.listbuilder_add(this__137.buffer__683, t_88);
-  return nil;
-end;
-SqlBuilder.methods.appendInt32List = function(this__138, values__722)
-  local fn__5042;
-  fn__5042 = function(x__724)
-    this__138:appendInt32(x__724);
-    return nil;
-  end;
-  this__138:appendList(values__722, fn__5042);
-  return nil;
-end;
-SqlBuilder.methods.appendInt64 = function(this__139, value__726)
-  local t_89;
-  t_89 = SqlInt64(value__726);
-  temper.listbuilder_add(this__139.buffer__683, t_89);
-  return nil;
-end;
-SqlBuilder.methods.appendInt64List = function(this__140, values__729)
-  local fn__5036;
-  fn__5036 = function(x__731)
-    this__140:appendInt64(x__731);
-    return nil;
-  end;
-  this__140:appendList(values__729, fn__5036);
-  return nil;
-end;
-SqlBuilder.methods.appendString = function(this__141, value__733)
+SqlBuilder.methods.appendSafe = function(this__145, sqlSource__793)
   local t_90;
-  t_90 = SqlString(value__733);
-  temper.listbuilder_add(this__141.buffer__683, t_90);
+  t_90 = SqlSource(sqlSource__793);
+  temper.listbuilder_add(this__145.buffer__791, t_90);
   return nil;
 end;
-SqlBuilder.methods.appendStringList = function(this__142, values__736)
-  local fn__5030;
-  fn__5030 = function(x__738)
-    this__142:appendString(x__738);
+SqlBuilder.methods.appendFragment = function(this__146, fragment__796)
+  local t_91;
+  t_91 = fragment__796.parts;
+  temper.listbuilder_addall(this__146.buffer__791, t_91);
+  return nil;
+end;
+SqlBuilder.methods.appendPart = function(this__147, part__799)
+  temper.listbuilder_add(this__147.buffer__791, part__799);
+  return nil;
+end;
+SqlBuilder.methods.appendPartList = function(this__148, values__802)
+  local fn__5752;
+  fn__5752 = function(x__804)
+    this__148:appendPart(x__804);
     return nil;
   end;
-  this__142:appendList(values__736, fn__5030);
+  this__148:appendList(values__802, fn__5752);
   return nil;
 end;
-SqlBuilder.methods.appendList = function(this__143, values__740, appendValue__741)
-  local t_91, t_92, i__743;
-  i__743 = 0;
+SqlBuilder.methods.appendBoolean = function(this__149, value__806)
+  local t_92;
+  t_92 = SqlBoolean(value__806);
+  temper.listbuilder_add(this__149.buffer__791, t_92);
+  return nil;
+end;
+SqlBuilder.methods.appendBooleanList = function(this__150, values__809)
+  local fn__5746;
+  fn__5746 = function(x__811)
+    this__150:appendBoolean(x__811);
+    return nil;
+  end;
+  this__150:appendList(values__809, fn__5746);
+  return nil;
+end;
+SqlBuilder.methods.appendDate = function(this__151, value__813)
+  local t_93;
+  t_93 = SqlDate(value__813);
+  temper.listbuilder_add(this__151.buffer__791, t_93);
+  return nil;
+end;
+SqlBuilder.methods.appendDateList = function(this__152, values__816)
+  local fn__5740;
+  fn__5740 = function(x__818)
+    this__152:appendDate(x__818);
+    return nil;
+  end;
+  this__152:appendList(values__816, fn__5740);
+  return nil;
+end;
+SqlBuilder.methods.appendFloat64 = function(this__153, value__820)
+  local t_94;
+  t_94 = SqlFloat64(value__820);
+  temper.listbuilder_add(this__153.buffer__791, t_94);
+  return nil;
+end;
+SqlBuilder.methods.appendFloat64List = function(this__154, values__823)
+  local fn__5734;
+  fn__5734 = function(x__825)
+    this__154:appendFloat64(x__825);
+    return nil;
+  end;
+  this__154:appendList(values__823, fn__5734);
+  return nil;
+end;
+SqlBuilder.methods.appendInt32 = function(this__155, value__827)
+  local t_95;
+  t_95 = SqlInt32(value__827);
+  temper.listbuilder_add(this__155.buffer__791, t_95);
+  return nil;
+end;
+SqlBuilder.methods.appendInt32List = function(this__156, values__830)
+  local fn__5728;
+  fn__5728 = function(x__832)
+    this__156:appendInt32(x__832);
+    return nil;
+  end;
+  this__156:appendList(values__830, fn__5728);
+  return nil;
+end;
+SqlBuilder.methods.appendInt64 = function(this__157, value__834)
+  local t_96;
+  t_96 = SqlInt64(value__834);
+  temper.listbuilder_add(this__157.buffer__791, t_96);
+  return nil;
+end;
+SqlBuilder.methods.appendInt64List = function(this__158, values__837)
+  local fn__5722;
+  fn__5722 = function(x__839)
+    this__158:appendInt64(x__839);
+    return nil;
+  end;
+  this__158:appendList(values__837, fn__5722);
+  return nil;
+end;
+SqlBuilder.methods.appendString = function(this__159, value__841)
+  local t_97;
+  t_97 = SqlString(value__841);
+  temper.listbuilder_add(this__159.buffer__791, t_97);
+  return nil;
+end;
+SqlBuilder.methods.appendStringList = function(this__160, values__844)
+  local fn__5716;
+  fn__5716 = function(x__846)
+    this__160:appendString(x__846);
+    return nil;
+  end;
+  this__160:appendList(values__844, fn__5716);
+  return nil;
+end;
+SqlBuilder.methods.appendList = function(this__161, values__848, appendValue__849)
+  local t_98, t_99, i__851;
+  i__851 = 0;
   while true do
-    t_91 = temper.listed_length(values__740);
-    if not (i__743 < t_91) then
+    t_98 = temper.listed_length(values__848);
+    if not (i__851 < t_98) then
       break;
     end
-    if (i__743 > 0) then
-      this__143:appendSafe(', ');
+    if (i__851 > 0) then
+      this__161:appendSafe(', ');
     end
-    t_92 = temper.listed_get(values__740, i__743);
-    appendValue__741(t_92);
-    i__743 = temper.int32_add(i__743, 1);
+    t_99 = temper.listed_get(values__848, i__851);
+    appendValue__849(t_99);
+    i__851 = temper.int32_add(i__851, 1);
   end
   return nil;
 end;
-SqlBuilder.get.accumulated = function(this__144)
-  return SqlFragment(temper.listbuilder_tolist(this__144.buffer__683));
+SqlBuilder.get.accumulated = function(this__162)
+  return SqlFragment(temper.listbuilder_tolist(this__162.buffer__791));
 end;
-SqlBuilder.constructor = function(this__252)
-  local t_93;
-  t_93 = temper.listbuilder_constructor();
-  this__252.buffer__683 = t_93;
+SqlBuilder.constructor = function(this__292)
+  local t_100;
+  t_100 = temper.listbuilder_constructor();
+  this__292.buffer__791 = t_100;
   return nil;
 end;
 SqlFragment = temper.type('SqlFragment');
-SqlFragment.methods.toSource = function(this__149)
-  return SqlSource(this__149:toString());
+SqlFragment.methods.toSource = function(this__167)
+  return SqlSource(this__167:toString());
 end;
-SqlFragment.methods.toString = function(this__150)
-  local t_94, builder__755, i__756;
-  builder__755 = temper.stringbuilder_constructor();
-  i__756 = 0;
+SqlFragment.methods.toString = function(this__168)
+  local t_101, builder__863, i__864;
+  builder__863 = temper.stringbuilder_constructor();
+  i__864 = 0;
   while true do
-    t_94 = temper.list_length(this__150.parts__750);
-    if not (i__756 < t_94) then
+    t_101 = temper.list_length(this__168.parts__858);
+    if not (i__864 < t_101) then
       break;
     end
-    temper.list_get(this__150.parts__750, i__756):formatTo(builder__755);
-    i__756 = temper.int32_add(i__756, 1);
+    temper.list_get(this__168.parts__858, i__864):formatTo(builder__863);
+    i__864 = temper.int32_add(i__864, 1);
   end
-  return temper.stringbuilder_tostring(builder__755);
+  return temper.stringbuilder_tostring(builder__863);
 end;
-SqlFragment.constructor = function(this__273, parts__758)
-  this__273.parts__750 = parts__758;
+SqlFragment.constructor = function(this__313, parts__866)
+  this__313.parts__858 = parts__866;
   return nil;
 end;
-SqlFragment.get.parts = function(this__888)
-  return this__888.parts__750;
+SqlFragment.get.parts = function(this__1000)
+  return this__1000.parts__858;
 end;
 SqlPart = temper.type('SqlPart');
-SqlPart.methods.formatTo = function(this__151, builder__760)
+SqlPart.methods.formatTo = function(this__169, builder__868)
   temper.virtual();
 end;
 SqlSource = temper.type('SqlSource', SqlPart);
-SqlSource.methods.formatTo = function(this__152, builder__764)
-  temper.stringbuilder_append(builder__764, this__152.source__762);
+SqlSource.methods.formatTo = function(this__170, builder__872)
+  temper.stringbuilder_append(builder__872, this__170.source__870);
   return nil;
 end;
-SqlSource.constructor = function(this__279, source__767)
-  this__279.source__762 = source__767;
+SqlSource.constructor = function(this__319, source__875)
+  this__319.source__870 = source__875;
   return nil;
 end;
-SqlSource.get.source = function(this__885)
-  return this__885.source__762;
+SqlSource.get.source = function(this__997)
+  return this__997.source__870;
 end;
 SqlBoolean = temper.type('SqlBoolean', SqlPart);
-SqlBoolean.methods.formatTo = function(this__153, builder__770)
-  local t_95;
-  if this__153.value__768 then
-    t_95 = 'TRUE';
+SqlBoolean.methods.formatTo = function(this__171, builder__878)
+  local t_102;
+  if this__171.value__876 then
+    t_102 = 'TRUE';
   else
-    t_95 = 'FALSE';
+    t_102 = 'FALSE';
   end
-  temper.stringbuilder_append(builder__770, t_95);
+  temper.stringbuilder_append(builder__878, t_102);
   return nil;
 end;
-SqlBoolean.constructor = function(this__282, value__773)
-  this__282.value__768 = value__773;
+SqlBoolean.constructor = function(this__322, value__881)
+  this__322.value__876 = value__881;
   return nil;
 end;
-SqlBoolean.get.value = function(this__891)
-  return this__891.value__768;
+SqlBoolean.get.value = function(this__1003)
+  return this__1003.value__876;
 end;
 SqlDate = temper.type('SqlDate', SqlPart);
-SqlDate.methods.formatTo = function(this__154, builder__776)
-  local t_96, fn__5075;
-  temper.stringbuilder_append(builder__776, "'");
-  t_96 = temper.date_tostring(this__154.value__774);
-  fn__5075 = function(c__778)
-    if (c__778 == 39) then
-      temper.stringbuilder_append(builder__776, "''");
+SqlDate.methods.formatTo = function(this__172, builder__884)
+  local t_103, fn__5761;
+  temper.stringbuilder_append(builder__884, "'");
+  t_103 = temper.date_tostring(this__172.value__882);
+  fn__5761 = function(c__886)
+    if (c__886 == 39) then
+      temper.stringbuilder_append(builder__884, "''");
     else
-      local local_97, local_98, local_99;
-      local_97, local_98, local_99 = temper.pcall(function()
-        temper.stringbuilder_appendcodepoint(builder__776, c__778);
+      local local_104, local_105, local_106;
+      local_104, local_105, local_106 = temper.pcall(function()
+        temper.stringbuilder_appendcodepoint(builder__884, c__886);
       end);
-      if local_97 then
+      if local_104 then
       else
         temper.bubble();
       end
     end
     return nil;
   end;
-  temper.string_foreach(t_96, fn__5075);
-  temper.stringbuilder_append(builder__776, "'");
+  temper.string_foreach(t_103, fn__5761);
+  temper.stringbuilder_append(builder__884, "'");
   return nil;
 end;
-SqlDate.constructor = function(this__285, value__780)
-  this__285.value__774 = value__780;
+SqlDate.constructor = function(this__325, value__888)
+  this__325.value__882 = value__888;
   return nil;
 end;
-SqlDate.get.value = function(this__906)
-  return this__906.value__774;
+SqlDate.get.value = function(this__1018)
+  return this__1018.value__882;
 end;
 SqlFloat64 = temper.type('SqlFloat64', SqlPart);
-SqlFloat64.methods.formatTo = function(this__155, builder__783)
-  local t_101, t_102, s__785;
-  s__785 = temper.float64_tostring(this__155.value__781);
-  if temper.str_eq(s__785, 'NaN') then
-    t_102 = true;
+SqlFloat64.methods.formatTo = function(this__173, builder__891)
+  local t_108, t_109, s__893;
+  s__893 = temper.float64_tostring(this__173.value__889);
+  if temper.str_eq(s__893, 'NaN') then
+    t_109 = true;
   else
-    if temper.str_eq(s__785, 'Infinity') then
-      t_101 = true;
+    if temper.str_eq(s__893, 'Infinity') then
+      t_108 = true;
     else
-      t_101 = temper.str_eq(s__785, '-Infinity');
+      t_108 = temper.str_eq(s__893, '-Infinity');
     end
-    t_102 = t_101;
+    t_109 = t_108;
   end
-  if t_102 then
-    temper.stringbuilder_append(builder__783, 'NULL');
+  if t_109 then
+    temper.stringbuilder_append(builder__891, 'NULL');
   else
-    temper.stringbuilder_append(builder__783, s__785);
+    temper.stringbuilder_append(builder__891, s__893);
   end
   return nil;
 end;
-SqlFloat64.constructor = function(this__288, value__787)
-  this__288.value__781 = value__787;
+SqlFloat64.constructor = function(this__328, value__895)
+  this__328.value__889 = value__895;
   return nil;
 end;
-SqlFloat64.get.value = function(this__903)
-  return this__903.value__781;
+SqlFloat64.get.value = function(this__1015)
+  return this__1015.value__889;
 end;
 SqlInt32 = temper.type('SqlInt32', SqlPart);
-SqlInt32.methods.formatTo = function(this__156, builder__790)
-  local t_103;
-  t_103 = temper.int32_tostring(this__156.value__788);
-  temper.stringbuilder_append(builder__790, t_103);
+SqlInt32.methods.formatTo = function(this__174, builder__898)
+  local t_110;
+  t_110 = temper.int32_tostring(this__174.value__896);
+  temper.stringbuilder_append(builder__898, t_110);
   return nil;
 end;
-SqlInt32.constructor = function(this__291, value__793)
-  this__291.value__788 = value__793;
+SqlInt32.constructor = function(this__331, value__901)
+  this__331.value__896 = value__901;
   return nil;
 end;
-SqlInt32.get.value = function(this__897)
-  return this__897.value__788;
+SqlInt32.get.value = function(this__1009)
+  return this__1009.value__896;
 end;
 SqlInt64 = temper.type('SqlInt64', SqlPart);
-SqlInt64.methods.formatTo = function(this__157, builder__796)
-  local t_104;
-  t_104 = temper.int64_tostring(this__157.value__794);
-  temper.stringbuilder_append(builder__796, t_104);
+SqlInt64.methods.formatTo = function(this__175, builder__904)
+  local t_111;
+  t_111 = temper.int64_tostring(this__175.value__902);
+  temper.stringbuilder_append(builder__904, t_111);
   return nil;
 end;
-SqlInt64.constructor = function(this__294, value__799)
-  this__294.value__794 = value__799;
+SqlInt64.constructor = function(this__334, value__907)
+  this__334.value__902 = value__907;
   return nil;
 end;
-SqlInt64.get.value = function(this__900)
-  return this__900.value__794;
+SqlInt64.get.value = function(this__1012)
+  return this__1012.value__902;
 end;
 SqlString = temper.type('SqlString', SqlPart);
-SqlString.methods.formatTo = function(this__158, builder__802)
-  local fn__5089;
-  temper.stringbuilder_append(builder__802, "'");
-  fn__5089 = function(c__804)
-    if (c__804 == 39) then
-      temper.stringbuilder_append(builder__802, "''");
+SqlString.methods.formatTo = function(this__176, builder__910)
+  local fn__5775;
+  temper.stringbuilder_append(builder__910, "'");
+  fn__5775 = function(c__912)
+    if (c__912 == 39) then
+      temper.stringbuilder_append(builder__910, "''");
     else
-      local local_105, local_106, local_107;
-      local_105, local_106, local_107 = temper.pcall(function()
-        temper.stringbuilder_appendcodepoint(builder__802, c__804);
+      local local_112, local_113, local_114;
+      local_112, local_113, local_114 = temper.pcall(function()
+        temper.stringbuilder_appendcodepoint(builder__910, c__912);
       end);
-      if local_105 then
+      if local_112 then
       else
         temper.bubble();
       end
     end
     return nil;
   end;
-  temper.string_foreach(this__158.value__800, fn__5089);
-  temper.stringbuilder_append(builder__802, "'");
+  temper.string_foreach(this__176.value__908, fn__5775);
+  temper.stringbuilder_append(builder__910, "'");
   return nil;
 end;
-SqlString.constructor = function(this__297, value__806)
-  this__297.value__800 = value__806;
+SqlString.constructor = function(this__337, value__914)
+  this__337.value__908 = value__914;
   return nil;
 end;
-SqlString.get.value = function(this__894)
-  return this__894.value__800;
+SqlString.get.value = function(this__1006)
+  return this__1006.value__908;
 end;
-changeset = function(tableDef__444, params__445)
-  local t_109;
-  t_109 = temper.map_constructor(temper.listof());
-  return ChangesetImpl__100(tableDef__444, params__445, t_109, temper.listof(), true);
+changeset = function(tableDef__484, params__485)
+  local t_116;
+  t_116 = temper.map_constructor(temper.listof());
+  return ChangesetImpl__108(tableDef__484, params__485, t_116, temper.listof(), true);
 end;
-isIdentStart__305 = function(c__635)
-  local return__230, t_110, t_111;
-  if (c__635 >= 97) then
-    t_110 = (c__635 <= 122);
+isIdentStart__345 = function(c__743)
+  local return__270, t_117, t_118;
+  if (c__743 >= 97) then
+    t_117 = (c__743 <= 122);
   else
-    t_110 = false;
+    t_117 = false;
   end
-  if t_110 then
-    return__230 = true;
+  if t_117 then
+    return__270 = true;
   else
-    if (c__635 >= 65) then
-      t_111 = (c__635 <= 90);
+    if (c__743 >= 65) then
+      t_118 = (c__743 <= 90);
     else
-      t_111 = false;
+      t_118 = false;
     end
-    if t_111 then
-      return__230 = true;
+    if t_118 then
+      return__270 = true;
     else
-      return__230 = (c__635 == 95);
+      return__270 = (c__743 == 95);
     end
   end
-  return return__230;
+  return return__270;
 end;
-isIdentPart__306 = function(c__637)
-  local return__231;
-  if isIdentStart__305(c__637) then
-    return__231 = true;
-  elseif (c__637 >= 48) then
-    return__231 = (c__637 <= 57);
+isIdentPart__346 = function(c__745)
+  local return__271;
+  if isIdentStart__345(c__745) then
+    return__271 = true;
+  elseif (c__745 >= 48) then
+    return__271 = (c__745 <= 57);
   else
-    return__231 = false;
+    return__271 = false;
   end
-  return return__231;
+  return return__271;
 end;
-safeIdentifier = function(name__639)
-  local t_112, idx__641, t_113;
-  if temper.string_isempty(name__639) then
+safeIdentifier = function(name__747)
+  local t_119, idx__749, t_120;
+  if temper.string_isempty(name__747) then
     temper.bubble();
   end
-  idx__641 = 1.0;
-  if not isIdentStart__305(temper.string_get(name__639, idx__641)) then
+  idx__749 = 1.0;
+  if not isIdentStart__345(temper.string_get(name__747, idx__749)) then
     temper.bubble();
   end
-  t_113 = temper.string_next(name__639, idx__641);
-  idx__641 = t_113;
+  t_120 = temper.string_next(name__747, idx__749);
+  idx__749 = t_120;
   while true do
-    if not temper.string_hasindex(name__639, idx__641) then
+    if not temper.string_hasindex(name__747, idx__749) then
       break;
     end
-    if not isIdentPart__306(temper.string_get(name__639, idx__641)) then
+    if not isIdentPart__346(temper.string_get(name__747, idx__749)) then
       temper.bubble();
     end
-    t_112 = temper.string_next(name__639, idx__641);
-    idx__641 = t_112;
+    t_119 = temper.string_next(name__747, idx__749);
+    idx__749 = t_119;
   end
-  return ValidatedIdentifier__124(name__639);
+  return ValidatedIdentifier__142(name__747);
 end;
-deleteSql = function(tableDef__534, id__535)
-  local b__537;
-  b__537 = SqlBuilder();
-  b__537:appendSafe('DELETE FROM ');
-  b__537:appendSafe(tableDef__534.tableName.sqlValue);
-  b__537:appendSafe(' WHERE id = ');
-  b__537:appendInt32(id__535);
-  return b__537.accumulated;
+deleteSql = function(tableDef__574, id__575)
+  local b__577;
+  b__577 = SqlBuilder();
+  b__577:appendSafe('DELETE FROM ');
+  b__577:appendSafe(tableDef__574.tableName.sqlValue);
+  b__577:appendSafe(' WHERE id = ');
+  b__577:appendInt32(id__575);
+  return b__577.accumulated;
 end;
-from = function(tableName__586)
-  return Query(tableName__586, temper.listof(), temper.listof(), temper.listof(), temper.null, temper.null);
+from = function(tableName__672)
+  return Query(tableName__672, temper.listof(), temper.listof(), temper.listof(), temper.null, temper.null, temper.listof());
+end;
+col = function(table__674, column__675)
+  local b__677;
+  b__677 = SqlBuilder();
+  b__677:appendSafe(table__674.sqlValue);
+  b__677:appendSafe('.');
+  b__677:appendSafe(column__675.sqlValue);
+  return b__677.accumulated;
 end;
 exports = {};
 exports.ChangesetError = ChangesetError;
 exports.Changeset = Changeset;
+exports.JoinType = JoinType;
+exports.InnerJoin = InnerJoin;
+exports.LeftJoin = LeftJoin;
+exports.RightJoin = RightJoin;
+exports.FullJoin = FullJoin;
+exports.JoinClause = JoinClause;
 exports.OrderClause = OrderClause;
 exports.Query = Query;
 exports.SafeIdentifier = SafeIdentifier;
@@ -1159,4 +1265,5 @@ exports.changeset = changeset;
 exports.safeIdentifier = safeIdentifier;
 exports.deleteSql = deleteSql;
 exports.from = from;
+exports.col = col;
 return exports;

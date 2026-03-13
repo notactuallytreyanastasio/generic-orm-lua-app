@@ -1,5 +1,5 @@
 local temper = require('temper-core');
-local safeIdentifier, TableDef, FieldDef, StringField, IntField, FloatField, BoolField, changeset, from, SqlBuilder, SqlString, SqlInt32, local_554, local_555, csid__302, userTable__303, sid__304, exports;
+local safeIdentifier, TableDef, FieldDef, StringField, IntField, FloatField, BoolField, changeset, from, SqlBuilder, col, SqlString, SqlInt32, local_614, local_615, csid__342, userTable__343, sid__344, exports;
 safeIdentifier = temper.import('orm/src', 'safeIdentifier');
 TableDef = temper.import('orm/src', 'TableDef');
 FieldDef = temper.import('orm/src', 'FieldDef');
@@ -10,1363 +10,1513 @@ BoolField = temper.import('orm/src', 'BoolField');
 changeset = temper.import('orm/src', 'changeset');
 from = temper.import('orm/src', 'from');
 SqlBuilder = temper.import('orm/src', 'SqlBuilder');
+col = temper.import('orm/src', 'col');
 SqlString = temper.import('orm/src', 'SqlString');
 SqlInt32 = temper.import('orm/src', 'SqlInt32');
-local_554 = (unpack or table.unpack);
-local_555 = require('luaunit');
-local_555.FAILURE_PREFIX = temper.test_failure_prefix;
+local_614 = (unpack or table.unpack);
+local_615 = require('luaunit');
+local_615.FAILURE_PREFIX = temper.test_failure_prefix;
 Test_ = {};
-csid__302 = function(name__447)
-  local return__203, t_114, local_115, local_116, local_117;
-  local_115, local_116, local_117 = temper.pcall(function()
-    t_114 = safeIdentifier(name__447);
-    return__203 = t_114;
+csid__342 = function(name__487)
+  local return__221, t_121, local_122, local_123, local_124;
+  local_122, local_123, local_124 = temper.pcall(function()
+    t_121 = safeIdentifier(name__487);
+    return__221 = t_121;
   end);
-  if local_115 then
+  if local_122 then
   else
-    return__203 = temper.bubble();
+    return__221 = temper.bubble();
   end
-  return return__203;
+  return return__221;
 end;
-userTable__303 = function()
-  return TableDef(csid__302('users'), temper.listof(FieldDef(csid__302('name'), StringField(), false), FieldDef(csid__302('email'), StringField(), false), FieldDef(csid__302('age'), IntField(), true), FieldDef(csid__302('score'), FloatField(), true), FieldDef(csid__302('active'), BoolField(), true)));
+userTable__343 = function()
+  return TableDef(csid__342('users'), temper.listof(FieldDef(csid__342('name'), StringField(), false), FieldDef(csid__342('email'), StringField(), false), FieldDef(csid__342('age'), IntField(), true), FieldDef(csid__342('score'), FloatField(), true), FieldDef(csid__342('active'), BoolField(), true)));
 end;
-Test_.test_castWhitelistsAllowedFields__908 = function()
-  temper.test('cast whitelists allowed fields', function(test_119)
-    local params__451, t_120, t_121, t_122, cs__452, t_123, fn__4823, t_124, fn__4822, t_125, fn__4821, t_126, fn__4820;
-    params__451 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'alice@example.com'), temper.pair_constructor('admin', 'true')));
-    t_120 = userTable__303();
-    t_121 = csid__302('name');
-    t_122 = csid__302('email');
-    cs__452 = changeset(t_120, params__451):cast(temper.listof(t_121, t_122));
-    t_123 = temper.mapped_has(cs__452.changes, 'name');
-    fn__4823 = function()
+Test_.test_castWhitelistsAllowedFields__1020 = function()
+  temper.test('cast whitelists allowed fields', function(test_126)
+    local params__491, t_127, t_128, t_129, cs__492, t_130, fn__5509, t_131, fn__5508, t_132, fn__5507, t_133, fn__5506;
+    params__491 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'alice@example.com'), temper.pair_constructor('admin', 'true')));
+    t_127 = userTable__343();
+    t_128 = csid__342('name');
+    t_129 = csid__342('email');
+    cs__492 = changeset(t_127, params__491):cast(temper.listof(t_128, t_129));
+    t_130 = temper.mapped_has(cs__492.changes, 'name');
+    fn__5509 = function()
       return 'name should be in changes';
     end;
-    temper.test_assert(test_119, t_123, fn__4823);
-    t_124 = temper.mapped_has(cs__452.changes, 'email');
-    fn__4822 = function()
+    temper.test_assert(test_126, t_130, fn__5509);
+    t_131 = temper.mapped_has(cs__492.changes, 'email');
+    fn__5508 = function()
       return 'email should be in changes';
     end;
-    temper.test_assert(test_119, t_124, fn__4822);
-    t_125 = not temper.mapped_has(cs__452.changes, 'admin');
-    fn__4821 = function()
+    temper.test_assert(test_126, t_131, fn__5508);
+    t_132 = not temper.mapped_has(cs__492.changes, 'admin');
+    fn__5507 = function()
       return 'admin must be dropped (not in whitelist)';
     end;
-    temper.test_assert(test_119, t_125, fn__4821);
-    t_126 = cs__452.isValid;
-    fn__4820 = function()
+    temper.test_assert(test_126, t_132, fn__5507);
+    t_133 = cs__492.isValid;
+    fn__5506 = function()
       return 'should still be valid';
     end;
-    temper.test_assert(test_119, t_126, fn__4820);
+    temper.test_assert(test_126, t_133, fn__5506);
     return nil;
   end);
 end;
-Test_.test_castIsReplacingNotAdditiveSecondCallResetsWhitelist__909 = function()
-  temper.test('cast is replacing not additive \xe2\x80\x94 second call resets whitelist', function(test_127)
-    local params__454, t_128, t_129, cs__455, t_130, fn__4802, t_131, fn__4801;
-    params__454 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'alice@example.com')));
-    t_128 = userTable__303();
-    t_129 = csid__302('name');
-    cs__455 = changeset(t_128, params__454):cast(temper.listof(t_129)):cast(temper.listof(csid__302('email')));
-    t_130 = not temper.mapped_has(cs__455.changes, 'name');
-    fn__4802 = function()
+Test_.test_castIsReplacingNotAdditiveSecondCallResetsWhitelist__1021 = function()
+  temper.test('cast is replacing not additive \xe2\x80\x94 second call resets whitelist', function(test_134)
+    local params__494, t_135, t_136, cs__495, t_137, fn__5488, t_138, fn__5487;
+    params__494 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'alice@example.com')));
+    t_135 = userTable__343();
+    t_136 = csid__342('name');
+    cs__495 = changeset(t_135, params__494):cast(temper.listof(t_136)):cast(temper.listof(csid__342('email')));
+    t_137 = not temper.mapped_has(cs__495.changes, 'name');
+    fn__5488 = function()
       return 'name must be excluded by second cast';
     end;
-    temper.test_assert(test_127, t_130, fn__4802);
-    t_131 = temper.mapped_has(cs__455.changes, 'email');
-    fn__4801 = function()
+    temper.test_assert(test_134, t_137, fn__5488);
+    t_138 = temper.mapped_has(cs__495.changes, 'email');
+    fn__5487 = function()
       return 'email should be present';
     end;
-    temper.test_assert(test_127, t_131, fn__4801);
+    temper.test_assert(test_134, t_138, fn__5487);
     return nil;
   end);
 end;
-Test_.test_castIgnoresEmptyStringValues__910 = function()
-  temper.test('cast ignores empty string values', function(test_132)
-    local params__457, t_133, t_134, t_135, cs__458, t_136, fn__4784, t_137, fn__4783;
-    params__457 = temper.map_constructor(temper.listof(temper.pair_constructor('name', ''), temper.pair_constructor('email', 'bob@example.com')));
-    t_133 = userTable__303();
-    t_134 = csid__302('name');
-    t_135 = csid__302('email');
-    cs__458 = changeset(t_133, params__457):cast(temper.listof(t_134, t_135));
-    t_136 = not temper.mapped_has(cs__458.changes, 'name');
-    fn__4784 = function()
+Test_.test_castIgnoresEmptyStringValues__1022 = function()
+  temper.test('cast ignores empty string values', function(test_139)
+    local params__497, t_140, t_141, t_142, cs__498, t_143, fn__5470, t_144, fn__5469;
+    params__497 = temper.map_constructor(temper.listof(temper.pair_constructor('name', ''), temper.pair_constructor('email', 'bob@example.com')));
+    t_140 = userTable__343();
+    t_141 = csid__342('name');
+    t_142 = csid__342('email');
+    cs__498 = changeset(t_140, params__497):cast(temper.listof(t_141, t_142));
+    t_143 = not temper.mapped_has(cs__498.changes, 'name');
+    fn__5470 = function()
       return 'empty name should not be in changes';
     end;
-    temper.test_assert(test_132, t_136, fn__4784);
-    t_137 = temper.mapped_has(cs__458.changes, 'email');
-    fn__4783 = function()
+    temper.test_assert(test_139, t_143, fn__5470);
+    t_144 = temper.mapped_has(cs__498.changes, 'email');
+    fn__5469 = function()
       return 'email should be in changes';
     end;
-    temper.test_assert(test_132, t_137, fn__4783);
+    temper.test_assert(test_139, t_144, fn__5469);
     return nil;
   end);
 end;
-Test_.test_validateRequiredPassesWhenFieldPresent__911 = function()
-  temper.test('validateRequired passes when field present', function(test_138)
-    local params__460, t_139, t_140, cs__461, t_141, fn__4767, t_142, fn__4766;
-    params__460 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice')));
-    t_139 = userTable__303();
-    t_140 = csid__302('name');
-    cs__461 = changeset(t_139, params__460):cast(temper.listof(t_140)):validateRequired(temper.listof(csid__302('name')));
-    t_141 = cs__461.isValid;
-    fn__4767 = function()
+Test_.test_validateRequiredPassesWhenFieldPresent__1023 = function()
+  temper.test('validateRequired passes when field present', function(test_145)
+    local params__500, t_146, t_147, cs__501, t_148, fn__5453, t_149, fn__5452;
+    params__500 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice')));
+    t_146 = userTable__343();
+    t_147 = csid__342('name');
+    cs__501 = changeset(t_146, params__500):cast(temper.listof(t_147)):validateRequired(temper.listof(csid__342('name')));
+    t_148 = cs__501.isValid;
+    fn__5453 = function()
       return 'should be valid';
     end;
-    temper.test_assert(test_138, t_141, fn__4767);
-    t_142 = (temper.list_length(cs__461.errors) == 0);
-    fn__4766 = function()
+    temper.test_assert(test_145, t_148, fn__5453);
+    t_149 = (temper.list_length(cs__501.errors) == 0);
+    fn__5452 = function()
       return 'no errors expected';
     end;
-    temper.test_assert(test_138, t_142, fn__4766);
+    temper.test_assert(test_145, t_149, fn__5452);
     return nil;
   end);
 end;
-Test_.test_validateRequiredFailsWhenFieldMissing__912 = function()
-  temper.test('validateRequired fails when field missing', function(test_143)
-    local params__463, t_144, t_145, cs__464, t_146, fn__4744, t_147, fn__4743, t_148, fn__4742;
-    params__463 = temper.map_constructor(temper.listof());
-    t_144 = userTable__303();
-    t_145 = csid__302('name');
-    cs__464 = changeset(t_144, params__463):cast(temper.listof(t_145)):validateRequired(temper.listof(csid__302('name')));
-    t_146 = not cs__464.isValid;
-    fn__4744 = function()
+Test_.test_validateRequiredFailsWhenFieldMissing__1024 = function()
+  temper.test('validateRequired fails when field missing', function(test_150)
+    local params__503, t_151, t_152, cs__504, t_153, fn__5430, t_154, fn__5429, t_155, fn__5428;
+    params__503 = temper.map_constructor(temper.listof());
+    t_151 = userTable__343();
+    t_152 = csid__342('name');
+    cs__504 = changeset(t_151, params__503):cast(temper.listof(t_152)):validateRequired(temper.listof(csid__342('name')));
+    t_153 = not cs__504.isValid;
+    fn__5430 = function()
       return 'should be invalid';
     end;
-    temper.test_assert(test_143, t_146, fn__4744);
-    t_147 = (temper.list_length(cs__464.errors) == 1);
-    fn__4743 = function()
+    temper.test_assert(test_150, t_153, fn__5430);
+    t_154 = (temper.list_length(cs__504.errors) == 1);
+    fn__5429 = function()
       return 'should have one error';
     end;
-    temper.test_assert(test_143, t_147, fn__4743);
-    t_148 = temper.str_eq((temper.list_get(cs__464.errors, 0)).field, 'name');
-    fn__4742 = function()
+    temper.test_assert(test_150, t_154, fn__5429);
+    t_155 = temper.str_eq((temper.list_get(cs__504.errors, 0)).field, 'name');
+    fn__5428 = function()
       return 'error should name the field';
     end;
-    temper.test_assert(test_143, t_148, fn__4742);
+    temper.test_assert(test_150, t_155, fn__5428);
     return nil;
   end);
 end;
-Test_.test_validateLengthPassesWithinRange__913 = function()
-  temper.test('validateLength passes within range', function(test_149)
-    local params__466, t_150, t_151, cs__467, t_152, fn__4731;
-    params__466 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice')));
-    t_150 = userTable__303();
-    t_151 = csid__302('name');
-    cs__467 = changeset(t_150, params__466):cast(temper.listof(t_151)):validateLength(csid__302('name'), 2, 50);
-    t_152 = cs__467.isValid;
-    fn__4731 = function()
+Test_.test_validateLengthPassesWithinRange__1025 = function()
+  temper.test('validateLength passes within range', function(test_156)
+    local params__506, t_157, t_158, cs__507, t_159, fn__5417;
+    params__506 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice')));
+    t_157 = userTable__343();
+    t_158 = csid__342('name');
+    cs__507 = changeset(t_157, params__506):cast(temper.listof(t_158)):validateLength(csid__342('name'), 2, 50);
+    t_159 = cs__507.isValid;
+    fn__5417 = function()
       return 'should be valid';
     end;
-    temper.test_assert(test_149, t_152, fn__4731);
+    temper.test_assert(test_156, t_159, fn__5417);
     return nil;
   end);
 end;
-Test_.test_validateLengthFailsWhenTooShort__914 = function()
-  temper.test('validateLength fails when too short', function(test_153)
-    local params__469, t_154, t_155, cs__470, t_156, fn__4719;
-    params__469 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'A')));
-    t_154 = userTable__303();
-    t_155 = csid__302('name');
-    cs__470 = changeset(t_154, params__469):cast(temper.listof(t_155)):validateLength(csid__302('name'), 2, 50);
-    t_156 = not cs__470.isValid;
-    fn__4719 = function()
+Test_.test_validateLengthFailsWhenTooShort__1026 = function()
+  temper.test('validateLength fails when too short', function(test_160)
+    local params__509, t_161, t_162, cs__510, t_163, fn__5405;
+    params__509 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'A')));
+    t_161 = userTable__343();
+    t_162 = csid__342('name');
+    cs__510 = changeset(t_161, params__509):cast(temper.listof(t_162)):validateLength(csid__342('name'), 2, 50);
+    t_163 = not cs__510.isValid;
+    fn__5405 = function()
       return 'should be invalid';
     end;
-    temper.test_assert(test_153, t_156, fn__4719);
+    temper.test_assert(test_160, t_163, fn__5405);
     return nil;
   end);
 end;
-Test_.test_validateLengthFailsWhenTooLong__915 = function()
-  temper.test('validateLength fails when too long', function(test_157)
-    local params__472, t_158, t_159, cs__473, t_160, fn__4707;
-    params__472 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')));
-    t_158 = userTable__303();
-    t_159 = csid__302('name');
-    cs__473 = changeset(t_158, params__472):cast(temper.listof(t_159)):validateLength(csid__302('name'), 2, 10);
-    t_160 = not cs__473.isValid;
-    fn__4707 = function()
+Test_.test_validateLengthFailsWhenTooLong__1027 = function()
+  temper.test('validateLength fails when too long', function(test_164)
+    local params__512, t_165, t_166, cs__513, t_167, fn__5393;
+    params__512 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')));
+    t_165 = userTable__343();
+    t_166 = csid__342('name');
+    cs__513 = changeset(t_165, params__512):cast(temper.listof(t_166)):validateLength(csid__342('name'), 2, 10);
+    t_167 = not cs__513.isValid;
+    fn__5393 = function()
       return 'should be invalid';
     end;
-    temper.test_assert(test_157, t_160, fn__4707);
+    temper.test_assert(test_164, t_167, fn__5393);
     return nil;
   end);
 end;
-Test_.test_validateIntPassesForValidInteger__916 = function()
-  temper.test('validateInt passes for valid integer', function(test_161)
-    local params__475, t_162, t_163, cs__476, t_164, fn__4696;
-    params__475 = temper.map_constructor(temper.listof(temper.pair_constructor('age', '30')));
-    t_162 = userTable__303();
-    t_163 = csid__302('age');
-    cs__476 = changeset(t_162, params__475):cast(temper.listof(t_163)):validateInt(csid__302('age'));
-    t_164 = cs__476.isValid;
-    fn__4696 = function()
+Test_.test_validateIntPassesForValidInteger__1028 = function()
+  temper.test('validateInt passes for valid integer', function(test_168)
+    local params__515, t_169, t_170, cs__516, t_171, fn__5382;
+    params__515 = temper.map_constructor(temper.listof(temper.pair_constructor('age', '30')));
+    t_169 = userTable__343();
+    t_170 = csid__342('age');
+    cs__516 = changeset(t_169, params__515):cast(temper.listof(t_170)):validateInt(csid__342('age'));
+    t_171 = cs__516.isValid;
+    fn__5382 = function()
       return 'should be valid';
     end;
-    temper.test_assert(test_161, t_164, fn__4696);
+    temper.test_assert(test_168, t_171, fn__5382);
     return nil;
   end);
 end;
-Test_.test_validateIntFailsForNonInteger__917 = function()
-  temper.test('validateInt fails for non-integer', function(test_165)
-    local params__478, t_166, t_167, cs__479, t_168, fn__4684;
-    params__478 = temper.map_constructor(temper.listof(temper.pair_constructor('age', 'not-a-number')));
-    t_166 = userTable__303();
-    t_167 = csid__302('age');
-    cs__479 = changeset(t_166, params__478):cast(temper.listof(t_167)):validateInt(csid__302('age'));
-    t_168 = not cs__479.isValid;
-    fn__4684 = function()
+Test_.test_validateIntFailsForNonInteger__1029 = function()
+  temper.test('validateInt fails for non-integer', function(test_172)
+    local params__518, t_173, t_174, cs__519, t_175, fn__5370;
+    params__518 = temper.map_constructor(temper.listof(temper.pair_constructor('age', 'not-a-number')));
+    t_173 = userTable__343();
+    t_174 = csid__342('age');
+    cs__519 = changeset(t_173, params__518):cast(temper.listof(t_174)):validateInt(csid__342('age'));
+    t_175 = not cs__519.isValid;
+    fn__5370 = function()
       return 'should be invalid';
     end;
-    temper.test_assert(test_165, t_168, fn__4684);
+    temper.test_assert(test_172, t_175, fn__5370);
     return nil;
   end);
 end;
-Test_.test_validateFloatPassesForValidFloat__918 = function()
-  temper.test('validateFloat passes for valid float', function(test_169)
-    local params__481, t_170, t_171, cs__482, t_172, fn__4673;
-    params__481 = temper.map_constructor(temper.listof(temper.pair_constructor('score', '9.5')));
-    t_170 = userTable__303();
-    t_171 = csid__302('score');
-    cs__482 = changeset(t_170, params__481):cast(temper.listof(t_171)):validateFloat(csid__302('score'));
-    t_172 = cs__482.isValid;
-    fn__4673 = function()
+Test_.test_validateFloatPassesForValidFloat__1030 = function()
+  temper.test('validateFloat passes for valid float', function(test_176)
+    local params__521, t_177, t_178, cs__522, t_179, fn__5359;
+    params__521 = temper.map_constructor(temper.listof(temper.pair_constructor('score', '9.5')));
+    t_177 = userTable__343();
+    t_178 = csid__342('score');
+    cs__522 = changeset(t_177, params__521):cast(temper.listof(t_178)):validateFloat(csid__342('score'));
+    t_179 = cs__522.isValid;
+    fn__5359 = function()
       return 'should be valid';
     end;
-    temper.test_assert(test_169, t_172, fn__4673);
+    temper.test_assert(test_176, t_179, fn__5359);
     return nil;
   end);
 end;
-Test_.test_validateInt64_passesForValid64_bitInteger__919 = function()
-  temper.test('validateInt64 passes for valid 64-bit integer', function(test_173)
-    local params__484, t_174, t_175, cs__485, t_176, fn__4662;
-    params__484 = temper.map_constructor(temper.listof(temper.pair_constructor('age', '9999999999')));
-    t_174 = userTable__303();
-    t_175 = csid__302('age');
-    cs__485 = changeset(t_174, params__484):cast(temper.listof(t_175)):validateInt64(csid__302('age'));
-    t_176 = cs__485.isValid;
-    fn__4662 = function()
+Test_.test_validateInt64_passesForValid64_bitInteger__1031 = function()
+  temper.test('validateInt64 passes for valid 64-bit integer', function(test_180)
+    local params__524, t_181, t_182, cs__525, t_183, fn__5348;
+    params__524 = temper.map_constructor(temper.listof(temper.pair_constructor('age', '9999999999')));
+    t_181 = userTable__343();
+    t_182 = csid__342('age');
+    cs__525 = changeset(t_181, params__524):cast(temper.listof(t_182)):validateInt64(csid__342('age'));
+    t_183 = cs__525.isValid;
+    fn__5348 = function()
       return 'should be valid';
     end;
-    temper.test_assert(test_173, t_176, fn__4662);
+    temper.test_assert(test_180, t_183, fn__5348);
     return nil;
   end);
 end;
-Test_.test_validateInt64_failsForNonInteger__920 = function()
-  temper.test('validateInt64 fails for non-integer', function(test_177)
-    local params__487, t_178, t_179, cs__488, t_180, fn__4650;
-    params__487 = temper.map_constructor(temper.listof(temper.pair_constructor('age', 'not-a-number')));
-    t_178 = userTable__303();
-    t_179 = csid__302('age');
-    cs__488 = changeset(t_178, params__487):cast(temper.listof(t_179)):validateInt64(csid__302('age'));
-    t_180 = not cs__488.isValid;
-    fn__4650 = function()
+Test_.test_validateInt64_failsForNonInteger__1032 = function()
+  temper.test('validateInt64 fails for non-integer', function(test_184)
+    local params__527, t_185, t_186, cs__528, t_187, fn__5336;
+    params__527 = temper.map_constructor(temper.listof(temper.pair_constructor('age', 'not-a-number')));
+    t_185 = userTable__343();
+    t_186 = csid__342('age');
+    cs__528 = changeset(t_185, params__527):cast(temper.listof(t_186)):validateInt64(csid__342('age'));
+    t_187 = not cs__528.isValid;
+    fn__5336 = function()
       return 'should be invalid';
     end;
-    temper.test_assert(test_177, t_180, fn__4650);
+    temper.test_assert(test_184, t_187, fn__5336);
     return nil;
   end);
 end;
-Test_.test_validateBoolAcceptsTrue1_yesOn__921 = function()
-  temper.test('validateBool accepts true/1/yes/on', function(test_181)
-    local fn__4647;
-    fn__4647 = function(v__490)
-      local params__491, t_182, t_183, cs__492, t_184, fn__4636;
-      params__491 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__490)));
-      t_182 = userTable__303();
-      t_183 = csid__302('active');
-      cs__492 = changeset(t_182, params__491):cast(temper.listof(t_183)):validateBool(csid__302('active'));
-      t_184 = cs__492.isValid;
-      fn__4636 = function()
-        return temper.concat('should accept: ', v__490);
+Test_.test_validateBoolAcceptsTrue1_yesOn__1033 = function()
+  temper.test('validateBool accepts true/1/yes/on', function(test_188)
+    local fn__5333;
+    fn__5333 = function(v__530)
+      local params__531, t_189, t_190, cs__532, t_191, fn__5322;
+      params__531 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__530)));
+      t_189 = userTable__343();
+      t_190 = csid__342('active');
+      cs__532 = changeset(t_189, params__531):cast(temper.listof(t_190)):validateBool(csid__342('active'));
+      t_191 = cs__532.isValid;
+      fn__5322 = function()
+        return temper.concat('should accept: ', v__530);
       end;
-      temper.test_assert(test_181, t_184, fn__4636);
+      temper.test_assert(test_188, t_191, fn__5322);
       return nil;
     end;
-    temper.list_foreach(temper.listof('true', '1', 'yes', 'on'), fn__4647);
+    temper.list_foreach(temper.listof('true', '1', 'yes', 'on'), fn__5333);
     return nil;
   end);
 end;
-Test_.test_validateBoolAcceptsFalse0_noOff__922 = function()
-  temper.test('validateBool accepts false/0/no/off', function(test_185)
-    local fn__4633;
-    fn__4633 = function(v__494)
-      local params__495, t_186, t_187, cs__496, t_188, fn__4622;
-      params__495 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__494)));
-      t_186 = userTable__303();
-      t_187 = csid__302('active');
-      cs__496 = changeset(t_186, params__495):cast(temper.listof(t_187)):validateBool(csid__302('active'));
-      t_188 = cs__496.isValid;
-      fn__4622 = function()
-        return temper.concat('should accept: ', v__494);
+Test_.test_validateBoolAcceptsFalse0_noOff__1034 = function()
+  temper.test('validateBool accepts false/0/no/off', function(test_192)
+    local fn__5319;
+    fn__5319 = function(v__534)
+      local params__535, t_193, t_194, cs__536, t_195, fn__5308;
+      params__535 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__534)));
+      t_193 = userTable__343();
+      t_194 = csid__342('active');
+      cs__536 = changeset(t_193, params__535):cast(temper.listof(t_194)):validateBool(csid__342('active'));
+      t_195 = cs__536.isValid;
+      fn__5308 = function()
+        return temper.concat('should accept: ', v__534);
       end;
-      temper.test_assert(test_185, t_188, fn__4622);
+      temper.test_assert(test_192, t_195, fn__5308);
       return nil;
     end;
-    temper.list_foreach(temper.listof('false', '0', 'no', 'off'), fn__4633);
+    temper.list_foreach(temper.listof('false', '0', 'no', 'off'), fn__5319);
     return nil;
   end);
 end;
-Test_.test_validateBoolRejectsAmbiguousValues__923 = function()
-  temper.test('validateBool rejects ambiguous values', function(test_189)
-    local fn__4619;
-    fn__4619 = function(v__498)
-      local params__499, t_190, t_191, cs__500, t_192, fn__4607;
-      params__499 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__498)));
-      t_190 = userTable__303();
-      t_191 = csid__302('active');
-      cs__500 = changeset(t_190, params__499):cast(temper.listof(t_191)):validateBool(csid__302('active'));
-      t_192 = not cs__500.isValid;
-      fn__4607 = function()
-        return temper.concat('should reject ambiguous: ', v__498);
+Test_.test_validateBoolRejectsAmbiguousValues__1035 = function()
+  temper.test('validateBool rejects ambiguous values', function(test_196)
+    local fn__5305;
+    fn__5305 = function(v__538)
+      local params__539, t_197, t_198, cs__540, t_199, fn__5293;
+      params__539 = temper.map_constructor(temper.listof(temper.pair_constructor('active', v__538)));
+      t_197 = userTable__343();
+      t_198 = csid__342('active');
+      cs__540 = changeset(t_197, params__539):cast(temper.listof(t_198)):validateBool(csid__342('active'));
+      t_199 = not cs__540.isValid;
+      fn__5293 = function()
+        return temper.concat('should reject ambiguous: ', v__538);
       end;
-      temper.test_assert(test_189, t_192, fn__4607);
+      temper.test_assert(test_196, t_199, fn__5293);
       return nil;
     end;
-    temper.list_foreach(temper.listof('TRUE', 'Yes', 'maybe', '2', 'enabled'), fn__4619);
+    temper.list_foreach(temper.listof('TRUE', 'Yes', 'maybe', '2', 'enabled'), fn__5305);
     return nil;
   end);
 end;
-Test_.test_toInsertSqlEscapesBobbyTables__924 = function()
-  temper.test('toInsertSql escapes Bobby Tables', function(test_193)
-    local t_194, params__502, t_195, t_196, t_197, cs__503, sqlFrag__504, local_198, local_199, local_200, s__505, t_202, fn__4591;
-    params__502 = temper.map_constructor(temper.listof(temper.pair_constructor('name', "Robert'); DROP TABLE users;--"), temper.pair_constructor('email', 'bobby@evil.com')));
-    t_195 = userTable__303();
-    t_196 = csid__302('name');
-    t_197 = csid__302('email');
-    cs__503 = changeset(t_195, params__502):cast(temper.listof(t_196, t_197)):validateRequired(temper.listof(csid__302('name'), csid__302('email')));
-    local_198, local_199, local_200 = temper.pcall(function()
-      t_194 = cs__503:toInsertSql();
-      sqlFrag__504 = t_194;
+Test_.test_toInsertSqlEscapesBobbyTables__1036 = function()
+  temper.test('toInsertSql escapes Bobby Tables', function(test_200)
+    local t_201, params__542, t_202, t_203, t_204, cs__543, sqlFrag__544, local_205, local_206, local_207, s__545, t_209, fn__5277;
+    params__542 = temper.map_constructor(temper.listof(temper.pair_constructor('name', "Robert'); DROP TABLE users;--"), temper.pair_constructor('email', 'bobby@evil.com')));
+    t_202 = userTable__343();
+    t_203 = csid__342('name');
+    t_204 = csid__342('email');
+    cs__543 = changeset(t_202, params__542):cast(temper.listof(t_203, t_204)):validateRequired(temper.listof(csid__342('name'), csid__342('email')));
+    local_205, local_206, local_207 = temper.pcall(function()
+      t_201 = cs__543:toInsertSql();
+      sqlFrag__544 = t_201;
     end);
-    if local_198 then
+    if local_205 then
     else
-      sqlFrag__504 = temper.bubble();
+      sqlFrag__544 = temper.bubble();
     end
-    s__505 = sqlFrag__504:toString();
-    t_202 = temper.is_string_index(temper.string_indexof(s__505, "''"));
-    fn__4591 = function()
-      return temper.concat('single quote must be doubled: ', s__505);
+    s__545 = sqlFrag__544:toString();
+    t_209 = temper.is_string_index(temper.string_indexof(s__545, "''"));
+    fn__5277 = function()
+      return temper.concat('single quote must be doubled: ', s__545);
     end;
-    temper.test_assert(test_193, t_202, fn__4591);
+    temper.test_assert(test_200, t_209, fn__5277);
     return nil;
   end);
 end;
-Test_.test_toInsertSqlProducesCorrectSqlForStringField__925 = function()
-  temper.test('toInsertSql produces correct SQL for string field', function(test_203)
-    local t_204, params__507, t_205, t_206, t_207, cs__508, sqlFrag__509, local_208, local_209, local_210, s__510, t_212, fn__4571, t_213, fn__4570;
-    params__507 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'a@example.com')));
-    t_205 = userTable__303();
-    t_206 = csid__302('name');
-    t_207 = csid__302('email');
-    cs__508 = changeset(t_205, params__507):cast(temper.listof(t_206, t_207)):validateRequired(temper.listof(csid__302('name'), csid__302('email')));
-    local_208, local_209, local_210 = temper.pcall(function()
-      t_204 = cs__508:toInsertSql();
-      sqlFrag__509 = t_204;
+Test_.test_toInsertSqlProducesCorrectSqlForStringField__1037 = function()
+  temper.test('toInsertSql produces correct SQL for string field', function(test_210)
+    local t_211, params__547, t_212, t_213, t_214, cs__548, sqlFrag__549, local_215, local_216, local_217, s__550, t_219, fn__5257, t_220, fn__5256;
+    params__547 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Alice'), temper.pair_constructor('email', 'a@example.com')));
+    t_212 = userTable__343();
+    t_213 = csid__342('name');
+    t_214 = csid__342('email');
+    cs__548 = changeset(t_212, params__547):cast(temper.listof(t_213, t_214)):validateRequired(temper.listof(csid__342('name'), csid__342('email')));
+    local_215, local_216, local_217 = temper.pcall(function()
+      t_211 = cs__548:toInsertSql();
+      sqlFrag__549 = t_211;
     end);
-    if local_208 then
+    if local_215 then
     else
-      sqlFrag__509 = temper.bubble();
+      sqlFrag__549 = temper.bubble();
     end
-    s__510 = sqlFrag__509:toString();
-    t_212 = temper.is_string_index(temper.string_indexof(s__510, 'INSERT INTO users'));
-    fn__4571 = function()
-      return temper.concat('has INSERT INTO: ', s__510);
+    s__550 = sqlFrag__549:toString();
+    t_219 = temper.is_string_index(temper.string_indexof(s__550, 'INSERT INTO users'));
+    fn__5257 = function()
+      return temper.concat('has INSERT INTO: ', s__550);
     end;
-    temper.test_assert(test_203, t_212, fn__4571);
-    t_213 = temper.is_string_index(temper.string_indexof(s__510, "'Alice'"));
-    fn__4570 = function()
-      return temper.concat('has quoted name: ', s__510);
+    temper.test_assert(test_210, t_219, fn__5257);
+    t_220 = temper.is_string_index(temper.string_indexof(s__550, "'Alice'"));
+    fn__5256 = function()
+      return temper.concat('has quoted name: ', s__550);
     end;
-    temper.test_assert(test_203, t_213, fn__4570);
+    temper.test_assert(test_210, t_220, fn__5256);
     return nil;
   end);
 end;
-Test_.test_toInsertSqlProducesCorrectSqlForIntField__926 = function()
-  temper.test('toInsertSql produces correct SQL for int field', function(test_214)
-    local t_215, params__512, t_216, t_217, t_218, t_219, cs__513, sqlFrag__514, local_220, local_221, local_222, s__515, t_224, fn__4552;
-    params__512 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Bob'), temper.pair_constructor('email', 'b@example.com'), temper.pair_constructor('age', '25')));
-    t_216 = userTable__303();
-    t_217 = csid__302('name');
-    t_218 = csid__302('email');
-    t_219 = csid__302('age');
-    cs__513 = changeset(t_216, params__512):cast(temper.listof(t_217, t_218, t_219)):validateRequired(temper.listof(csid__302('name'), csid__302('email')));
-    local_220, local_221, local_222 = temper.pcall(function()
-      t_215 = cs__513:toInsertSql();
-      sqlFrag__514 = t_215;
+Test_.test_toInsertSqlProducesCorrectSqlForIntField__1038 = function()
+  temper.test('toInsertSql produces correct SQL for int field', function(test_221)
+    local t_222, params__552, t_223, t_224, t_225, t_226, cs__553, sqlFrag__554, local_227, local_228, local_229, s__555, t_231, fn__5238;
+    params__552 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Bob'), temper.pair_constructor('email', 'b@example.com'), temper.pair_constructor('age', '25')));
+    t_223 = userTable__343();
+    t_224 = csid__342('name');
+    t_225 = csid__342('email');
+    t_226 = csid__342('age');
+    cs__553 = changeset(t_223, params__552):cast(temper.listof(t_224, t_225, t_226)):validateRequired(temper.listof(csid__342('name'), csid__342('email')));
+    local_227, local_228, local_229 = temper.pcall(function()
+      t_222 = cs__553:toInsertSql();
+      sqlFrag__554 = t_222;
     end);
-    if local_220 then
+    if local_227 then
     else
-      sqlFrag__514 = temper.bubble();
+      sqlFrag__554 = temper.bubble();
     end
-    s__515 = sqlFrag__514:toString();
-    t_224 = temper.is_string_index(temper.string_indexof(s__515, '25'));
-    fn__4552 = function()
-      return temper.concat('age rendered unquoted: ', s__515);
+    s__555 = sqlFrag__554:toString();
+    t_231 = temper.is_string_index(temper.string_indexof(s__555, '25'));
+    fn__5238 = function()
+      return temper.concat('age rendered unquoted: ', s__555);
     end;
-    temper.test_assert(test_214, t_224, fn__4552);
+    temper.test_assert(test_221, t_231, fn__5238);
     return nil;
   end);
 end;
-Test_.test_toInsertSqlBubblesOnInvalidChangeset__927 = function()
-  temper.test('toInsertSql bubbles on invalid changeset', function(test_225)
-    local params__517, t_226, t_227, cs__518, didBubble__519, local_228, local_229, local_230, fn__4543;
-    params__517 = temper.map_constructor(temper.listof());
-    t_226 = userTable__303();
-    t_227 = csid__302('name');
-    cs__518 = changeset(t_226, params__517):cast(temper.listof(t_227)):validateRequired(temper.listof(csid__302('name')));
-    local_228, local_229, local_230 = temper.pcall(function()
-      cs__518:toInsertSql();
-      didBubble__519 = false;
-    end);
-    if local_228 then
-    else
-      didBubble__519 = true;
-    end
-    fn__4543 = function()
-      return 'invalid changeset should bubble';
-    end;
-    temper.test_assert(test_225, didBubble__519, fn__4543);
-    return nil;
-  end);
-end;
-Test_.test_toInsertSqlEnforcesNonNullableFieldsIndependentlyOfIsValid__928 = function()
-  temper.test('toInsertSql enforces non-nullable fields independently of isValid', function(test_232)
-    local strictTable__521, params__522, t_233, cs__523, t_234, fn__4525, didBubble__524, local_235, local_236, local_237, fn__4524;
-    strictTable__521 = TableDef(csid__302('posts'), temper.listof(FieldDef(csid__302('title'), StringField(), false), FieldDef(csid__302('body'), StringField(), true)));
-    params__522 = temper.map_constructor(temper.listof(temper.pair_constructor('body', 'hello')));
-    t_233 = csid__302('body');
-    cs__523 = changeset(strictTable__521, params__522):cast(temper.listof(t_233));
-    t_234 = cs__523.isValid;
-    fn__4525 = function()
-      return 'changeset should appear valid (no explicit validation run)';
-    end;
-    temper.test_assert(test_232, t_234, fn__4525);
+Test_.test_toInsertSqlBubblesOnInvalidChangeset__1039 = function()
+  temper.test('toInsertSql bubbles on invalid changeset', function(test_232)
+    local params__557, t_233, t_234, cs__558, didBubble__559, local_235, local_236, local_237, fn__5229;
+    params__557 = temper.map_constructor(temper.listof());
+    t_233 = userTable__343();
+    t_234 = csid__342('name');
+    cs__558 = changeset(t_233, params__557):cast(temper.listof(t_234)):validateRequired(temper.listof(csid__342('name')));
     local_235, local_236, local_237 = temper.pcall(function()
-      cs__523:toInsertSql();
-      didBubble__524 = false;
+      cs__558:toInsertSql();
+      didBubble__559 = false;
     end);
     if local_235 then
     else
-      didBubble__524 = true;
+      didBubble__559 = true;
     end
-    fn__4524 = function()
-      return 'toInsertSql should enforce nullable regardless of isValid';
-    end;
-    temper.test_assert(test_232, didBubble__524, fn__4524);
-    return nil;
-  end);
-end;
-Test_.test_toUpdateSqlProducesCorrectSql__929 = function()
-  temper.test('toUpdateSql produces correct SQL', function(test_239)
-    local t_240, params__526, t_241, t_242, cs__527, sqlFrag__528, local_243, local_244, local_245, s__529, t_247, fn__4512;
-    params__526 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Bob')));
-    t_241 = userTable__303();
-    t_242 = csid__302('name');
-    cs__527 = changeset(t_241, params__526):cast(temper.listof(t_242)):validateRequired(temper.listof(csid__302('name')));
-    local_243, local_244, local_245 = temper.pcall(function()
-      t_240 = cs__527:toUpdateSql(42);
-      sqlFrag__528 = t_240;
-    end);
-    if local_243 then
-    else
-      sqlFrag__528 = temper.bubble();
-    end
-    s__529 = sqlFrag__528:toString();
-    t_247 = temper.str_eq(s__529, "UPDATE users SET name = 'Bob' WHERE id = 42");
-    fn__4512 = function()
-      return temper.concat('got: ', s__529);
-    end;
-    temper.test_assert(test_239, t_247, fn__4512);
-    return nil;
-  end);
-end;
-Test_.test_toUpdateSqlBubblesOnInvalidChangeset__930 = function()
-  temper.test('toUpdateSql bubbles on invalid changeset', function(test_248)
-    local params__531, t_249, t_250, cs__532, didBubble__533, local_251, local_252, local_253, fn__4503;
-    params__531 = temper.map_constructor(temper.listof());
-    t_249 = userTable__303();
-    t_250 = csid__302('name');
-    cs__532 = changeset(t_249, params__531):cast(temper.listof(t_250)):validateRequired(temper.listof(csid__302('name')));
-    local_251, local_252, local_253 = temper.pcall(function()
-      cs__532:toUpdateSql(1);
-      didBubble__533 = false;
-    end);
-    if local_251 then
-    else
-      didBubble__533 = true;
-    end
-    fn__4503 = function()
+    fn__5229 = function()
       return 'invalid changeset should bubble';
     end;
-    temper.test_assert(test_248, didBubble__533, fn__4503);
+    temper.test_assert(test_232, didBubble__559, fn__5229);
     return nil;
   end);
 end;
-sid__304 = function(name__588)
-  local return__223, t_255, local_256, local_257, local_258;
-  local_256, local_257, local_258 = temper.pcall(function()
-    t_255 = safeIdentifier(name__588);
-    return__223 = t_255;
+Test_.test_toInsertSqlEnforcesNonNullableFieldsIndependentlyOfIsValid__1040 = function()
+  temper.test('toInsertSql enforces non-nullable fields independently of isValid', function(test_239)
+    local strictTable__561, params__562, t_240, cs__563, t_241, fn__5211, didBubble__564, local_242, local_243, local_244, fn__5210;
+    strictTable__561 = TableDef(csid__342('posts'), temper.listof(FieldDef(csid__342('title'), StringField(), false), FieldDef(csid__342('body'), StringField(), true)));
+    params__562 = temper.map_constructor(temper.listof(temper.pair_constructor('body', 'hello')));
+    t_240 = csid__342('body');
+    cs__563 = changeset(strictTable__561, params__562):cast(temper.listof(t_240));
+    t_241 = cs__563.isValid;
+    fn__5211 = function()
+      return 'changeset should appear valid (no explicit validation run)';
+    end;
+    temper.test_assert(test_239, t_241, fn__5211);
+    local_242, local_243, local_244 = temper.pcall(function()
+      cs__563:toInsertSql();
+      didBubble__564 = false;
+    end);
+    if local_242 then
+    else
+      didBubble__564 = true;
+    end
+    fn__5210 = function()
+      return 'toInsertSql should enforce nullable regardless of isValid';
+    end;
+    temper.test_assert(test_239, didBubble__564, fn__5210);
+    return nil;
   end);
-  if local_256 then
-  else
-    return__223 = temper.bubble();
-  end
-  return return__223;
 end;
-Test_.test_bareFromProducesSelect__955 = function()
-  temper.test('bare from produces SELECT *', function(test_260)
-    local q__591, t_261, fn__4433;
-    q__591 = from(sid__304('users'));
-    t_261 = temper.str_eq(q__591:toSql():toString(), 'SELECT * FROM users');
-    fn__4433 = function()
+Test_.test_toUpdateSqlProducesCorrectSql__1041 = function()
+  temper.test('toUpdateSql produces correct SQL', function(test_246)
+    local t_247, params__566, t_248, t_249, cs__567, sqlFrag__568, local_250, local_251, local_252, s__569, t_254, fn__5198;
+    params__566 = temper.map_constructor(temper.listof(temper.pair_constructor('name', 'Bob')));
+    t_248 = userTable__343();
+    t_249 = csid__342('name');
+    cs__567 = changeset(t_248, params__566):cast(temper.listof(t_249)):validateRequired(temper.listof(csid__342('name')));
+    local_250, local_251, local_252 = temper.pcall(function()
+      t_247 = cs__567:toUpdateSql(42);
+      sqlFrag__568 = t_247;
+    end);
+    if local_250 then
+    else
+      sqlFrag__568 = temper.bubble();
+    end
+    s__569 = sqlFrag__568:toString();
+    t_254 = temper.str_eq(s__569, "UPDATE users SET name = 'Bob' WHERE id = 42");
+    fn__5198 = function()
+      return temper.concat('got: ', s__569);
+    end;
+    temper.test_assert(test_246, t_254, fn__5198);
+    return nil;
+  end);
+end;
+Test_.test_toUpdateSqlBubblesOnInvalidChangeset__1042 = function()
+  temper.test('toUpdateSql bubbles on invalid changeset', function(test_255)
+    local params__571, t_256, t_257, cs__572, didBubble__573, local_258, local_259, local_260, fn__5189;
+    params__571 = temper.map_constructor(temper.listof());
+    t_256 = userTable__343();
+    t_257 = csid__342('name');
+    cs__572 = changeset(t_256, params__571):cast(temper.listof(t_257)):validateRequired(temper.listof(csid__342('name')));
+    local_258, local_259, local_260 = temper.pcall(function()
+      cs__572:toUpdateSql(1);
+      didBubble__573 = false;
+    end);
+    if local_258 then
+    else
+      didBubble__573 = true;
+    end
+    fn__5189 = function()
+      return 'invalid changeset should bubble';
+    end;
+    temper.test_assert(test_255, didBubble__573, fn__5189);
+    return nil;
+  end);
+end;
+sid__344 = function(name__678)
+  local return__263, t_262, local_263, local_264, local_265;
+  local_263, local_264, local_265 = temper.pcall(function()
+    t_262 = safeIdentifier(name__678);
+    return__263 = t_262;
+  end);
+  if local_263 then
+  else
+    return__263 = temper.bubble();
+  end
+  return return__263;
+end;
+Test_.test_bareFromProducesSelect__1079 = function()
+  temper.test('bare from produces SELECT *', function(test_267)
+    local q__681, t_268, fn__5079;
+    q__681 = from(sid__344('users'));
+    t_268 = temper.str_eq(q__681:toSql():toString(), 'SELECT * FROM users');
+    fn__5079 = function()
       return 'bare query';
     end;
-    temper.test_assert(test_260, t_261, fn__4433);
+    temper.test_assert(test_267, t_268, fn__5079);
     return nil;
   end);
 end;
-Test_.test_selectRestrictsColumns__956 = function()
-  temper.test('select restricts columns', function(test_262)
-    local t_263, t_264, t_265, q__593, t_266, fn__4423;
-    t_263 = sid__304('users');
-    t_264 = sid__304('id');
-    t_265 = sid__304('name');
-    q__593 = from(t_263):select(temper.listof(t_264, t_265));
-    t_266 = temper.str_eq(q__593:toSql():toString(), 'SELECT id, name FROM users');
-    fn__4423 = function()
+Test_.test_selectRestrictsColumns__1080 = function()
+  temper.test('select restricts columns', function(test_269)
+    local t_270, t_271, t_272, q__683, t_273, fn__5069;
+    t_270 = sid__344('users');
+    t_271 = sid__344('id');
+    t_272 = sid__344('name');
+    q__683 = from(t_270):select(temper.listof(t_271, t_272));
+    t_273 = temper.str_eq(q__683:toSql():toString(), 'SELECT id, name FROM users');
+    fn__5069 = function()
       return 'select columns';
     end;
-    temper.test_assert(test_262, t_266, fn__4423);
+    temper.test_assert(test_269, t_273, fn__5069);
     return nil;
   end);
 end;
-Test_.test_whereAddsConditionWithIntValue__957 = function()
-  temper.test('where adds condition with int value', function(test_267)
-    local t_268, t_269, t_270, q__595, t_271, fn__4411;
-    t_268 = sid__304('users');
-    t_269 = SqlBuilder();
-    t_269:appendSafe('age > ');
-    t_269:appendInt32(18);
-    t_270 = t_269.accumulated;
-    q__595 = from(t_268):where(t_270);
-    t_271 = temper.str_eq(q__595:toSql():toString(), 'SELECT * FROM users WHERE age > 18');
-    fn__4411 = function()
+Test_.test_whereAddsConditionWithIntValue__1081 = function()
+  temper.test('where adds condition with int value', function(test_274)
+    local t_275, t_276, t_277, q__685, t_278, fn__5057;
+    t_275 = sid__344('users');
+    t_276 = SqlBuilder();
+    t_276:appendSafe('age > ');
+    t_276:appendInt32(18);
+    t_277 = t_276.accumulated;
+    q__685 = from(t_275):where(t_277);
+    t_278 = temper.str_eq(q__685:toSql():toString(), 'SELECT * FROM users WHERE age > 18');
+    fn__5057 = function()
       return 'where int';
     end;
-    temper.test_assert(test_267, t_271, fn__4411);
+    temper.test_assert(test_274, t_278, fn__5057);
     return nil;
   end);
 end;
-Test_.test_whereAddsConditionWithBoolValue__959 = function()
-  temper.test('where adds condition with bool value', function(test_272)
-    local t_273, t_274, t_275, q__597, t_276, fn__4399;
-    t_273 = sid__304('users');
-    t_274 = SqlBuilder();
-    t_274:appendSafe('active = ');
-    t_274:appendBoolean(true);
-    t_275 = t_274.accumulated;
-    q__597 = from(t_273):where(t_275);
-    t_276 = temper.str_eq(q__597:toSql():toString(), 'SELECT * FROM users WHERE active = TRUE');
-    fn__4399 = function()
+Test_.test_whereAddsConditionWithBoolValue__1083 = function()
+  temper.test('where adds condition with bool value', function(test_279)
+    local t_280, t_281, t_282, q__687, t_283, fn__5045;
+    t_280 = sid__344('users');
+    t_281 = SqlBuilder();
+    t_281:appendSafe('active = ');
+    t_281:appendBoolean(true);
+    t_282 = t_281.accumulated;
+    q__687 = from(t_280):where(t_282);
+    t_283 = temper.str_eq(q__687:toSql():toString(), 'SELECT * FROM users WHERE active = TRUE');
+    fn__5045 = function()
       return 'where bool';
     end;
-    temper.test_assert(test_272, t_276, fn__4399);
+    temper.test_assert(test_279, t_283, fn__5045);
     return nil;
   end);
 end;
-Test_.test_chainedWhereUsesAnd__961 = function()
-  temper.test('chained where uses AND', function(test_277)
-    local t_278, t_279, t_280, t_281, t_282, q__599, t_283, fn__4382;
-    t_278 = sid__304('users');
-    t_279 = SqlBuilder();
-    t_279:appendSafe('age > ');
-    t_279:appendInt32(18);
-    t_280 = t_279.accumulated;
-    t_281 = from(t_278):where(t_280);
-    t_282 = SqlBuilder();
-    t_282:appendSafe('active = ');
-    t_282:appendBoolean(true);
-    q__599 = t_281:where(t_282.accumulated);
-    t_283 = temper.str_eq(q__599:toSql():toString(), 'SELECT * FROM users WHERE age > 18 AND active = TRUE');
-    fn__4382 = function()
+Test_.test_chainedWhereUsesAnd__1085 = function()
+  temper.test('chained where uses AND', function(test_284)
+    local t_285, t_286, t_287, t_288, t_289, q__689, t_290, fn__5028;
+    t_285 = sid__344('users');
+    t_286 = SqlBuilder();
+    t_286:appendSafe('age > ');
+    t_286:appendInt32(18);
+    t_287 = t_286.accumulated;
+    t_288 = from(t_285):where(t_287);
+    t_289 = SqlBuilder();
+    t_289:appendSafe('active = ');
+    t_289:appendBoolean(true);
+    q__689 = t_288:where(t_289.accumulated);
+    t_290 = temper.str_eq(q__689:toSql():toString(), 'SELECT * FROM users WHERE age > 18 AND active = TRUE');
+    fn__5028 = function()
       return 'chained where';
     end;
-    temper.test_assert(test_277, t_283, fn__4382);
+    temper.test_assert(test_284, t_290, fn__5028);
     return nil;
   end);
 end;
-Test_.test_orderByAsc__964 = function()
-  temper.test('orderBy ASC', function(test_284)
-    local t_285, t_286, q__601, t_287, fn__4373;
-    t_285 = sid__304('users');
-    t_286 = sid__304('name');
-    q__601 = from(t_285):orderBy(t_286, true);
-    t_287 = temper.str_eq(q__601:toSql():toString(), 'SELECT * FROM users ORDER BY name ASC');
-    fn__4373 = function()
+Test_.test_orderByAsc__1088 = function()
+  temper.test('orderBy ASC', function(test_291)
+    local t_292, t_293, q__691, t_294, fn__5019;
+    t_292 = sid__344('users');
+    t_293 = sid__344('name');
+    q__691 = from(t_292):orderBy(t_293, true);
+    t_294 = temper.str_eq(q__691:toSql():toString(), 'SELECT * FROM users ORDER BY name ASC');
+    fn__5019 = function()
       return 'order asc';
     end;
-    temper.test_assert(test_284, t_287, fn__4373);
+    temper.test_assert(test_291, t_294, fn__5019);
     return nil;
   end);
 end;
-Test_.test_orderByDesc__965 = function()
-  temper.test('orderBy DESC', function(test_288)
-    local t_289, t_290, q__603, t_291, fn__4364;
-    t_289 = sid__304('users');
-    t_290 = sid__304('created_at');
-    q__603 = from(t_289):orderBy(t_290, false);
-    t_291 = temper.str_eq(q__603:toSql():toString(), 'SELECT * FROM users ORDER BY created_at DESC');
-    fn__4364 = function()
+Test_.test_orderByDesc__1089 = function()
+  temper.test('orderBy DESC', function(test_295)
+    local t_296, t_297, q__693, t_298, fn__5010;
+    t_296 = sid__344('users');
+    t_297 = sid__344('created_at');
+    q__693 = from(t_296):orderBy(t_297, false);
+    t_298 = temper.str_eq(q__693:toSql():toString(), 'SELECT * FROM users ORDER BY created_at DESC');
+    fn__5010 = function()
       return 'order desc';
     end;
-    temper.test_assert(test_288, t_291, fn__4364);
+    temper.test_assert(test_295, t_298, fn__5010);
     return nil;
   end);
 end;
-Test_.test_limitAndOffset__966 = function()
-  temper.test('limit and offset', function(test_292)
-    local t_293, t_294, q__605, local_295, local_296, local_297, t_299, fn__4357;
-    local_295, local_296, local_297 = temper.pcall(function()
-      t_293 = from(sid__304('users')):limit(10);
-      t_294 = t_293:offset(20);
-      q__605 = t_294;
+Test_.test_limitAndOffset__1090 = function()
+  temper.test('limit and offset', function(test_299)
+    local t_300, t_301, q__695, local_302, local_303, local_304, t_306, fn__5003;
+    local_302, local_303, local_304 = temper.pcall(function()
+      t_300 = from(sid__344('users')):limit(10);
+      t_301 = t_300:offset(20);
+      q__695 = t_301;
     end);
-    if local_295 then
+    if local_302 then
     else
-      q__605 = temper.bubble();
+      q__695 = temper.bubble();
     end
-    t_299 = temper.str_eq(q__605:toSql():toString(), 'SELECT * FROM users LIMIT 10 OFFSET 20');
-    fn__4357 = function()
+    t_306 = temper.str_eq(q__695:toSql():toString(), 'SELECT * FROM users LIMIT 10 OFFSET 20');
+    fn__5003 = function()
       return 'limit/offset';
     end;
-    temper.test_assert(test_292, t_299, fn__4357);
+    temper.test_assert(test_299, t_306, fn__5003);
     return nil;
   end);
 end;
-Test_.test_limitBubblesOnNegative__967 = function()
-  temper.test('limit bubbles on negative', function(test_300)
-    local didBubble__607, local_301, local_302, local_303, fn__4353;
-    local_301, local_302, local_303 = temper.pcall(function()
-      from(sid__304('users')):limit(-1);
-      didBubble__607 = false;
+Test_.test_limitBubblesOnNegative__1091 = function()
+  temper.test('limit bubbles on negative', function(test_307)
+    local didBubble__697, local_308, local_309, local_310, fn__4999;
+    local_308, local_309, local_310 = temper.pcall(function()
+      from(sid__344('users')):limit(-1);
+      didBubble__697 = false;
     end);
-    if local_301 then
+    if local_308 then
     else
-      didBubble__607 = true;
+      didBubble__697 = true;
     end
-    fn__4353 = function()
+    fn__4999 = function()
       return 'negative limit should bubble';
     end;
-    temper.test_assert(test_300, didBubble__607, fn__4353);
+    temper.test_assert(test_307, didBubble__697, fn__4999);
     return nil;
   end);
 end;
-Test_.test_offsetBubblesOnNegative__968 = function()
-  temper.test('offset bubbles on negative', function(test_305)
-    local didBubble__609, local_306, local_307, local_308, fn__4349;
-    local_306, local_307, local_308 = temper.pcall(function()
-      from(sid__304('users')):offset(-1);
-      didBubble__609 = false;
+Test_.test_offsetBubblesOnNegative__1092 = function()
+  temper.test('offset bubbles on negative', function(test_312)
+    local didBubble__699, local_313, local_314, local_315, fn__4995;
+    local_313, local_314, local_315 = temper.pcall(function()
+      from(sid__344('users')):offset(-1);
+      didBubble__699 = false;
     end);
-    if local_306 then
+    if local_313 then
     else
-      didBubble__609 = true;
+      didBubble__699 = true;
     end
-    fn__4349 = function()
+    fn__4995 = function()
       return 'negative offset should bubble';
     end;
-    temper.test_assert(test_305, didBubble__609, fn__4349);
+    temper.test_assert(test_312, didBubble__699, fn__4995);
     return nil;
   end);
 end;
-Test_.test_complexComposedQuery__969 = function()
-  temper.test('complex composed query', function(test_310)
-    local t_311, t_312, t_313, t_314, t_315, t_316, t_317, t_318, t_319, t_320, minAge__611, q__612, local_321, local_322, local_323, t_325, fn__4326;
-    minAge__611 = 21;
-    local_321, local_322, local_323 = temper.pcall(function()
-      t_311 = sid__304('users');
-      t_312 = sid__304('id');
-      t_313 = sid__304('name');
-      t_314 = sid__304('email');
-      t_315 = from(t_311):select(temper.listof(t_312, t_313, t_314));
-      t_316 = SqlBuilder();
-      t_316:appendSafe('age >= ');
-      t_316:appendInt32(21);
-      t_317 = t_315:where(t_316.accumulated);
-      t_318 = SqlBuilder();
-      t_318:appendSafe('active = ');
-      t_318:appendBoolean(true);
-      t_319 = t_317:where(t_318.accumulated):orderBy(sid__304('name'), true):limit(25);
-      t_320 = t_319:offset(0);
-      q__612 = t_320;
+Test_.test_complexComposedQuery__1093 = function()
+  temper.test('complex composed query', function(test_317)
+    local t_318, t_319, t_320, t_321, t_322, t_323, t_324, t_325, t_326, t_327, minAge__701, q__702, local_328, local_329, local_330, t_332, fn__4972;
+    minAge__701 = 21;
+    local_328, local_329, local_330 = temper.pcall(function()
+      t_318 = sid__344('users');
+      t_319 = sid__344('id');
+      t_320 = sid__344('name');
+      t_321 = sid__344('email');
+      t_322 = from(t_318):select(temper.listof(t_319, t_320, t_321));
+      t_323 = SqlBuilder();
+      t_323:appendSafe('age >= ');
+      t_323:appendInt32(21);
+      t_324 = t_322:where(t_323.accumulated);
+      t_325 = SqlBuilder();
+      t_325:appendSafe('active = ');
+      t_325:appendBoolean(true);
+      t_326 = t_324:where(t_325.accumulated):orderBy(sid__344('name'), true):limit(25);
+      t_327 = t_326:offset(0);
+      q__702 = t_327;
     end);
-    if local_321 then
+    if local_328 then
     else
-      q__612 = temper.bubble();
+      q__702 = temper.bubble();
     end
-    t_325 = temper.str_eq(q__612:toSql():toString(), 'SELECT id, name, email FROM users WHERE age >= 21 AND active = TRUE ORDER BY name ASC LIMIT 25 OFFSET 0');
-    fn__4326 = function()
+    t_332 = temper.str_eq(q__702:toSql():toString(), 'SELECT id, name, email FROM users WHERE age >= 21 AND active = TRUE ORDER BY name ASC LIMIT 25 OFFSET 0');
+    fn__4972 = function()
       return 'complex query';
     end;
-    temper.test_assert(test_310, t_325, fn__4326);
+    temper.test_assert(test_317, t_332, fn__4972);
     return nil;
   end);
 end;
-Test_.test_safeToSqlAppliesDefaultLimitWhenNoneSet__972 = function()
-  temper.test('safeToSql applies default limit when none set', function(test_326)
-    local t_327, t_328, q__614, local_329, local_330, local_331, s__615, t_333, fn__4320;
-    q__614 = from(sid__304('users'));
-    local_329, local_330, local_331 = temper.pcall(function()
-      t_327 = q__614:safeToSql(100);
-      t_328 = t_327;
+Test_.test_safeToSqlAppliesDefaultLimitWhenNoneSet__1096 = function()
+  temper.test('safeToSql applies default limit when none set', function(test_333)
+    local t_334, t_335, q__704, local_336, local_337, local_338, s__705, t_340, fn__4966;
+    q__704 = from(sid__344('users'));
+    local_336, local_337, local_338 = temper.pcall(function()
+      t_334 = q__704:safeToSql(100);
+      t_335 = t_334;
     end);
-    if local_329 then
+    if local_336 then
     else
-      t_328 = temper.bubble();
+      t_335 = temper.bubble();
     end
-    s__615 = t_328:toString();
-    t_333 = temper.str_eq(s__615, 'SELECT * FROM users LIMIT 100');
-    fn__4320 = function()
-      return temper.concat('should have limit: ', s__615);
+    s__705 = t_335:toString();
+    t_340 = temper.str_eq(s__705, 'SELECT * FROM users LIMIT 100');
+    fn__4966 = function()
+      return temper.concat('should have limit: ', s__705);
     end;
-    temper.test_assert(test_326, t_333, fn__4320);
+    temper.test_assert(test_333, t_340, fn__4966);
     return nil;
   end);
 end;
-Test_.test_safeToSqlRespectsExplicitLimit__973 = function()
-  temper.test('safeToSql respects explicit limit', function(test_334)
-    local t_335, t_336, t_337, q__617, local_338, local_339, local_340, local_342, local_343, local_344, s__618, t_346, fn__4314;
-    local_338, local_339, local_340 = temper.pcall(function()
-      t_335 = from(sid__304('users')):limit(5);
-      q__617 = t_335;
+Test_.test_safeToSqlRespectsExplicitLimit__1097 = function()
+  temper.test('safeToSql respects explicit limit', function(test_341)
+    local t_342, t_343, t_344, q__707, local_345, local_346, local_347, local_349, local_350, local_351, s__708, t_353, fn__4960;
+    local_345, local_346, local_347 = temper.pcall(function()
+      t_342 = from(sid__344('users')):limit(5);
+      q__707 = t_342;
     end);
-    if local_338 then
+    if local_345 then
     else
-      q__617 = temper.bubble();
+      q__707 = temper.bubble();
     end
-    local_342, local_343, local_344 = temper.pcall(function()
-      t_336 = q__617:safeToSql(100);
-      t_337 = t_336;
+    local_349, local_350, local_351 = temper.pcall(function()
+      t_343 = q__707:safeToSql(100);
+      t_344 = t_343;
     end);
-    if local_342 then
+    if local_349 then
     else
-      t_337 = temper.bubble();
+      t_344 = temper.bubble();
     end
-    s__618 = t_337:toString();
-    t_346 = temper.str_eq(s__618, 'SELECT * FROM users LIMIT 5');
-    fn__4314 = function()
-      return temper.concat('explicit limit preserved: ', s__618);
+    s__708 = t_344:toString();
+    t_353 = temper.str_eq(s__708, 'SELECT * FROM users LIMIT 5');
+    fn__4960 = function()
+      return temper.concat('explicit limit preserved: ', s__708);
     end;
-    temper.test_assert(test_334, t_346, fn__4314);
+    temper.test_assert(test_341, t_353, fn__4960);
     return nil;
   end);
 end;
-Test_.test_safeToSqlBubblesOnNegativeDefaultLimit__974 = function()
-  temper.test('safeToSql bubbles on negative defaultLimit', function(test_347)
-    local didBubble__620, local_348, local_349, local_350, fn__4310;
-    local_348, local_349, local_350 = temper.pcall(function()
-      from(sid__304('users')):safeToSql(-1);
-      didBubble__620 = false;
+Test_.test_safeToSqlBubblesOnNegativeDefaultLimit__1098 = function()
+  temper.test('safeToSql bubbles on negative defaultLimit', function(test_354)
+    local didBubble__710, local_355, local_356, local_357, fn__4956;
+    local_355, local_356, local_357 = temper.pcall(function()
+      from(sid__344('users')):safeToSql(-1);
+      didBubble__710 = false;
     end);
-    if local_348 then
+    if local_355 then
     else
-      didBubble__620 = true;
+      didBubble__710 = true;
     end
-    fn__4310 = function()
+    fn__4956 = function()
       return 'negative defaultLimit should bubble';
     end;
-    temper.test_assert(test_347, didBubble__620, fn__4310);
+    temper.test_assert(test_354, didBubble__710, fn__4956);
     return nil;
   end);
 end;
-Test_.test_whereWithInjectionAttemptInStringValueIsEscaped__975 = function()
-  temper.test('where with injection attempt in string value is escaped', function(test_352)
-    local evil__622, t_353, t_354, t_355, q__623, s__624, t_356, fn__4293, t_357, fn__4292;
-    evil__622 = "'; DROP TABLE users; --";
-    t_353 = sid__304('users');
-    t_354 = SqlBuilder();
-    t_354:appendSafe('name = ');
-    t_354:appendString("'; DROP TABLE users; --");
-    t_355 = t_354.accumulated;
-    q__623 = from(t_353):where(t_355);
-    s__624 = q__623:toSql():toString();
-    t_356 = temper.is_string_index(temper.string_indexof(s__624, "''"));
-    fn__4293 = function()
-      return temper.concat('quotes must be doubled: ', s__624);
+Test_.test_whereWithInjectionAttemptInStringValueIsEscaped__1099 = function()
+  temper.test('where with injection attempt in string value is escaped', function(test_359)
+    local evil__712, t_360, t_361, t_362, q__713, s__714, t_363, fn__4939, t_364, fn__4938;
+    evil__712 = "'; DROP TABLE users; --";
+    t_360 = sid__344('users');
+    t_361 = SqlBuilder();
+    t_361:appendSafe('name = ');
+    t_361:appendString("'; DROP TABLE users; --");
+    t_362 = t_361.accumulated;
+    q__713 = from(t_360):where(t_362);
+    s__714 = q__713:toSql():toString();
+    t_363 = temper.is_string_index(temper.string_indexof(s__714, "''"));
+    fn__4939 = function()
+      return temper.concat('quotes must be doubled: ', s__714);
     end;
-    temper.test_assert(test_352, t_356, fn__4293);
-    t_357 = temper.is_string_index(temper.string_indexof(s__624, 'SELECT * FROM users WHERE name ='));
-    fn__4292 = function()
-      return temper.concat('structure intact: ', s__624);
+    temper.test_assert(test_359, t_363, fn__4939);
+    t_364 = temper.is_string_index(temper.string_indexof(s__714, 'SELECT * FROM users WHERE name ='));
+    fn__4938 = function()
+      return temper.concat('structure intact: ', s__714);
     end;
-    temper.test_assert(test_352, t_357, fn__4292);
+    temper.test_assert(test_359, t_364, fn__4938);
     return nil;
   end);
 end;
-Test_.test_safeIdentifierRejectsUserSuppliedTableNameWithMetacharacters__977 = function()
-  temper.test('safeIdentifier rejects user-supplied table name with metacharacters', function(test_358)
-    local attack__626, didBubble__627, local_359, local_360, local_361, fn__4289;
-    attack__626 = 'users; DROP TABLE users; --';
-    local_359, local_360, local_361 = temper.pcall(function()
+Test_.test_safeIdentifierRejectsUserSuppliedTableNameWithMetacharacters__1101 = function()
+  temper.test('safeIdentifier rejects user-supplied table name with metacharacters', function(test_365)
+    local attack__716, didBubble__717, local_366, local_367, local_368, fn__4935;
+    attack__716 = 'users; DROP TABLE users; --';
+    local_366, local_367, local_368 = temper.pcall(function()
       safeIdentifier('users; DROP TABLE users; --');
-      didBubble__627 = false;
+      didBubble__717 = false;
     end);
-    if local_359 then
+    if local_366 then
     else
-      didBubble__627 = true;
+      didBubble__717 = true;
     end
-    fn__4289 = function()
+    fn__4935 = function()
       return 'metacharacter-containing name must be rejected at construction';
     end;
-    temper.test_assert(test_358, didBubble__627, fn__4289);
+    temper.test_assert(test_365, didBubble__717, fn__4935);
     return nil;
   end);
 end;
-Test_.test_safeIdentifierAcceptsValidNames__978 = function()
-  temper.test('safeIdentifier accepts valid names', function(test_363)
-    local t_364, id__665, local_365, local_366, local_367, t_369, fn__4284;
-    local_365, local_366, local_367 = temper.pcall(function()
-      t_364 = safeIdentifier('user_name');
-      id__665 = t_364;
+Test_.test_innerJoinProducesInnerJoin__1102 = function()
+  temper.test('innerJoin produces INNER JOIN', function(test_370)
+    local t_371, t_372, t_373, t_374, q__719, t_375, fn__4923;
+    t_371 = sid__344('users');
+    t_372 = sid__344('orders');
+    t_373 = SqlBuilder();
+    t_373:appendSafe('users.id = orders.user_id');
+    t_374 = t_373.accumulated;
+    q__719 = from(t_371):innerJoin(t_372, t_374);
+    t_375 = temper.str_eq(q__719:toSql():toString(), 'SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id');
+    fn__4923 = function()
+      return 'inner join';
+    end;
+    temper.test_assert(test_370, t_375, fn__4923);
+    return nil;
+  end);
+end;
+Test_.test_leftJoinProducesLeftJoin__1104 = function()
+  temper.test('leftJoin produces LEFT JOIN', function(test_376)
+    local t_377, t_378, t_379, t_380, q__721, t_381, fn__4911;
+    t_377 = sid__344('users');
+    t_378 = sid__344('profiles');
+    t_379 = SqlBuilder();
+    t_379:appendSafe('users.id = profiles.user_id');
+    t_380 = t_379.accumulated;
+    q__721 = from(t_377):leftJoin(t_378, t_380);
+    t_381 = temper.str_eq(q__721:toSql():toString(), 'SELECT * FROM users LEFT JOIN profiles ON users.id = profiles.user_id');
+    fn__4911 = function()
+      return 'left join';
+    end;
+    temper.test_assert(test_376, t_381, fn__4911);
+    return nil;
+  end);
+end;
+Test_.test_rightJoinProducesRightJoin__1106 = function()
+  temper.test('rightJoin produces RIGHT JOIN', function(test_382)
+    local t_383, t_384, t_385, t_386, q__723, t_387, fn__4899;
+    t_383 = sid__344('orders');
+    t_384 = sid__344('users');
+    t_385 = SqlBuilder();
+    t_385:appendSafe('orders.user_id = users.id');
+    t_386 = t_385.accumulated;
+    q__723 = from(t_383):rightJoin(t_384, t_386);
+    t_387 = temper.str_eq(q__723:toSql():toString(), 'SELECT * FROM orders RIGHT JOIN users ON orders.user_id = users.id');
+    fn__4899 = function()
+      return 'right join';
+    end;
+    temper.test_assert(test_382, t_387, fn__4899);
+    return nil;
+  end);
+end;
+Test_.test_fullJoinProducesFullOuterJoin__1108 = function()
+  temper.test('fullJoin produces FULL OUTER JOIN', function(test_388)
+    local t_389, t_390, t_391, t_392, q__725, t_393, fn__4887;
+    t_389 = sid__344('users');
+    t_390 = sid__344('orders');
+    t_391 = SqlBuilder();
+    t_391:appendSafe('users.id = orders.user_id');
+    t_392 = t_391.accumulated;
+    q__725 = from(t_389):fullJoin(t_390, t_392);
+    t_393 = temper.str_eq(q__725:toSql():toString(), 'SELECT * FROM users FULL OUTER JOIN orders ON users.id = orders.user_id');
+    fn__4887 = function()
+      return 'full join';
+    end;
+    temper.test_assert(test_388, t_393, fn__4887);
+    return nil;
+  end);
+end;
+Test_.test_chainedJoins__1110 = function()
+  temper.test('chained joins', function(test_394)
+    local t_395, t_396, t_397, t_398, t_399, t_400, t_401, q__727, t_402, fn__4870;
+    t_395 = sid__344('users');
+    t_396 = sid__344('orders');
+    t_397 = SqlBuilder();
+    t_397:appendSafe('users.id = orders.user_id');
+    t_398 = t_397.accumulated;
+    t_399 = from(t_395):innerJoin(t_396, t_398);
+    t_400 = sid__344('profiles');
+    t_401 = SqlBuilder();
+    t_401:appendSafe('users.id = profiles.user_id');
+    q__727 = t_399:leftJoin(t_400, t_401.accumulated);
+    t_402 = temper.str_eq(q__727:toSql():toString(), 'SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id LEFT JOIN profiles ON users.id = profiles.user_id');
+    fn__4870 = function()
+      return 'chained joins';
+    end;
+    temper.test_assert(test_394, t_402, fn__4870);
+    return nil;
+  end);
+end;
+Test_.test_joinWithWhereAndOrderBy__1113 = function()
+  temper.test('join with where and orderBy', function(test_403)
+    local t_404, t_405, t_406, t_407, t_408, t_409, t_410, q__729, local_411, local_412, local_413, t_415, fn__4851;
+    local_411, local_412, local_413 = temper.pcall(function()
+      t_404 = sid__344('users');
+      t_405 = sid__344('orders');
+      t_406 = SqlBuilder();
+      t_406:appendSafe('users.id = orders.user_id');
+      t_407 = t_406.accumulated;
+      t_408 = from(t_404):innerJoin(t_405, t_407);
+      t_409 = SqlBuilder();
+      t_409:appendSafe('orders.total > ');
+      t_409:appendInt32(100);
+      t_410 = t_408:where(t_409.accumulated):orderBy(sid__344('name'), true):limit(10);
+      q__729 = t_410;
     end);
-    if local_365 then
+    if local_411 then
     else
-      id__665 = temper.bubble();
+      q__729 = temper.bubble();
     end
-    t_369 = temper.str_eq(id__665.sqlValue, 'user_name');
-    fn__4284 = function()
+    t_415 = temper.str_eq(q__729:toSql():toString(), 'SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id WHERE orders.total > 100 ORDER BY name ASC LIMIT 10');
+    fn__4851 = function()
+      return 'join with where/order/limit';
+    end;
+    temper.test_assert(test_403, t_415, fn__4851);
+    return nil;
+  end);
+end;
+Test_.test_colHelperProducesQualifiedReference__1116 = function()
+  temper.test('col helper produces qualified reference', function(test_416)
+    local c__731, t_417, fn__4843;
+    c__731 = col(sid__344('users'), sid__344('id'));
+    t_417 = temper.str_eq(c__731:toString(), 'users.id');
+    fn__4843 = function()
+      return 'col helper';
+    end;
+    temper.test_assert(test_416, t_417, fn__4843);
+    return nil;
+  end);
+end;
+Test_.test_joinWithColHelper__1117 = function()
+  temper.test('join with col helper', function(test_418)
+    local onCond__733, b__734, t_419, t_420, t_421, q__735, t_422, fn__4823;
+    onCond__733 = col(sid__344('users'), sid__344('id'));
+    b__734 = SqlBuilder();
+    b__734:appendFragment(onCond__733);
+    b__734:appendSafe(' = ');
+    b__734:appendFragment(col(sid__344('orders'), sid__344('user_id')));
+    t_419 = sid__344('users');
+    t_420 = sid__344('orders');
+    t_421 = b__734.accumulated;
+    q__735 = from(t_419):innerJoin(t_420, t_421);
+    t_422 = temper.str_eq(q__735:toSql():toString(), 'SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id');
+    fn__4823 = function()
+      return 'join with col';
+    end;
+    temper.test_assert(test_418, t_422, fn__4823);
+    return nil;
+  end);
+end;
+Test_.test_safeIdentifierAcceptsValidNames__1118 = function()
+  temper.test('safeIdentifier accepts valid names', function(test_423)
+    local t_424, id__773, local_425, local_426, local_427, t_429, fn__4818;
+    local_425, local_426, local_427 = temper.pcall(function()
+      t_424 = safeIdentifier('user_name');
+      id__773 = t_424;
+    end);
+    if local_425 then
+    else
+      id__773 = temper.bubble();
+    end
+    t_429 = temper.str_eq(id__773.sqlValue, 'user_name');
+    fn__4818 = function()
       return 'value should round-trip';
     end;
-    temper.test_assert(test_363, t_369, fn__4284);
+    temper.test_assert(test_423, t_429, fn__4818);
     return nil;
   end);
 end;
-Test_.test_safeIdentifierRejectsEmptyString__979 = function()
-  temper.test('safeIdentifier rejects empty string', function(test_370)
-    local didBubble__667, local_371, local_372, local_373, fn__4281;
-    local_371, local_372, local_373 = temper.pcall(function()
+Test_.test_safeIdentifierRejectsEmptyString__1119 = function()
+  temper.test('safeIdentifier rejects empty string', function(test_430)
+    local didBubble__775, local_431, local_432, local_433, fn__4815;
+    local_431, local_432, local_433 = temper.pcall(function()
       safeIdentifier('');
-      didBubble__667 = false;
+      didBubble__775 = false;
     end);
-    if local_371 then
+    if local_431 then
     else
-      didBubble__667 = true;
+      didBubble__775 = true;
     end
-    fn__4281 = function()
+    fn__4815 = function()
       return 'empty string should bubble';
     end;
-    temper.test_assert(test_370, didBubble__667, fn__4281);
+    temper.test_assert(test_430, didBubble__775, fn__4815);
     return nil;
   end);
 end;
-Test_.test_safeIdentifierRejectsLeadingDigit__980 = function()
-  temper.test('safeIdentifier rejects leading digit', function(test_375)
-    local didBubble__669, local_376, local_377, local_378, fn__4278;
-    local_376, local_377, local_378 = temper.pcall(function()
+Test_.test_safeIdentifierRejectsLeadingDigit__1120 = function()
+  temper.test('safeIdentifier rejects leading digit', function(test_435)
+    local didBubble__777, local_436, local_437, local_438, fn__4812;
+    local_436, local_437, local_438 = temper.pcall(function()
       safeIdentifier('1col');
-      didBubble__669 = false;
+      didBubble__777 = false;
     end);
-    if local_376 then
+    if local_436 then
     else
-      didBubble__669 = true;
+      didBubble__777 = true;
     end
-    fn__4278 = function()
+    fn__4812 = function()
       return 'leading digit should bubble';
     end;
-    temper.test_assert(test_375, didBubble__669, fn__4278);
+    temper.test_assert(test_435, didBubble__777, fn__4812);
     return nil;
   end);
 end;
-Test_.test_safeIdentifierRejectsSqlMetacharacters__981 = function()
-  temper.test('safeIdentifier rejects SQL metacharacters', function(test_380)
-    local cases__671, fn__4275;
-    cases__671 = temper.listof('name); DROP TABLE', "col'", 'a b', 'a-b', 'a.b', 'a;b');
-    fn__4275 = function(c__672)
-      local didBubble__673, local_381, local_382, local_383, fn__4272;
-      local_381, local_382, local_383 = temper.pcall(function()
-        safeIdentifier(c__672);
-        didBubble__673 = false;
+Test_.test_safeIdentifierRejectsSqlMetacharacters__1121 = function()
+  temper.test('safeIdentifier rejects SQL metacharacters', function(test_440)
+    local cases__779, fn__4809;
+    cases__779 = temper.listof('name); DROP TABLE', "col'", 'a b', 'a-b', 'a.b', 'a;b');
+    fn__4809 = function(c__780)
+      local didBubble__781, local_441, local_442, local_443, fn__4806;
+      local_441, local_442, local_443 = temper.pcall(function()
+        safeIdentifier(c__780);
+        didBubble__781 = false;
       end);
-      if local_381 then
+      if local_441 then
       else
-        didBubble__673 = true;
+        didBubble__781 = true;
       end
-      fn__4272 = function()
-        return temper.concat('should reject: ', c__672);
+      fn__4806 = function()
+        return temper.concat('should reject: ', c__780);
       end;
-      temper.test_assert(test_380, didBubble__673, fn__4272);
+      temper.test_assert(test_440, didBubble__781, fn__4806);
       return nil;
     end;
-    temper.list_foreach(cases__671, fn__4275);
+    temper.list_foreach(cases__779, fn__4809);
     return nil;
   end);
 end;
-Test_.test_tableDefFieldLookupFound__982 = function()
-  temper.test('TableDef field lookup - found', function(test_385)
-    local t_386, t_387, t_388, t_389, t_390, t_391, t_392, local_393, local_394, local_395, local_397, local_398, local_399, t_401, t_402, local_403, local_404, local_405, t_407, t_408, td__675, f__676, local_409, local_410, local_411, t_413, fn__4261;
-    local_393, local_394, local_395 = temper.pcall(function()
-      t_386 = safeIdentifier('users');
-      t_387 = t_386;
+Test_.test_tableDefFieldLookupFound__1122 = function()
+  temper.test('TableDef field lookup - found', function(test_445)
+    local t_446, t_447, t_448, t_449, t_450, t_451, t_452, local_453, local_454, local_455, local_457, local_458, local_459, t_461, t_462, local_463, local_464, local_465, t_467, t_468, td__783, f__784, local_469, local_470, local_471, t_473, fn__4795;
+    local_453, local_454, local_455 = temper.pcall(function()
+      t_446 = safeIdentifier('users');
+      t_447 = t_446;
     end);
-    if local_393 then
+    if local_453 then
     else
-      t_387 = temper.bubble();
+      t_447 = temper.bubble();
     end
-    local_397, local_398, local_399 = temper.pcall(function()
-      t_388 = safeIdentifier('name');
-      t_389 = t_388;
+    local_457, local_458, local_459 = temper.pcall(function()
+      t_448 = safeIdentifier('name');
+      t_449 = t_448;
     end);
-    if local_397 then
+    if local_457 then
     else
-      t_389 = temper.bubble();
+      t_449 = temper.bubble();
     end
-    t_401 = StringField();
-    t_402 = FieldDef(t_389, t_401, false);
-    local_403, local_404, local_405 = temper.pcall(function()
-      t_390 = safeIdentifier('age');
-      t_391 = t_390;
+    t_461 = StringField();
+    t_462 = FieldDef(t_449, t_461, false);
+    local_463, local_464, local_465 = temper.pcall(function()
+      t_450 = safeIdentifier('age');
+      t_451 = t_450;
     end);
-    if local_403 then
+    if local_463 then
     else
-      t_391 = temper.bubble();
+      t_451 = temper.bubble();
     end
-    t_407 = IntField();
-    t_408 = FieldDef(t_391, t_407, false);
-    td__675 = TableDef(t_387, temper.listof(t_402, t_408));
-    local_409, local_410, local_411 = temper.pcall(function()
-      t_392 = td__675:field('age');
-      f__676 = t_392;
+    t_467 = IntField();
+    t_468 = FieldDef(t_451, t_467, false);
+    td__783 = TableDef(t_447, temper.listof(t_462, t_468));
+    local_469, local_470, local_471 = temper.pcall(function()
+      t_452 = td__783:field('age');
+      f__784 = t_452;
     end);
-    if local_409 then
+    if local_469 then
     else
-      f__676 = temper.bubble();
+      f__784 = temper.bubble();
     end
-    t_413 = temper.str_eq(f__676.name.sqlValue, 'age');
-    fn__4261 = function()
+    t_473 = temper.str_eq(f__784.name.sqlValue, 'age');
+    fn__4795 = function()
       return 'should find age field';
     end;
-    temper.test_assert(test_385, t_413, fn__4261);
+    temper.test_assert(test_445, t_473, fn__4795);
     return nil;
   end);
 end;
-Test_.test_tableDefFieldLookupNotFoundBubbles__983 = function()
-  temper.test('TableDef field lookup - not found bubbles', function(test_414)
-    local t_415, t_416, t_417, t_418, local_419, local_420, local_421, local_423, local_424, local_425, t_427, t_428, td__678, didBubble__679, local_429, local_430, local_431, fn__4255;
-    local_419, local_420, local_421 = temper.pcall(function()
-      t_415 = safeIdentifier('users');
-      t_416 = t_415;
+Test_.test_tableDefFieldLookupNotFoundBubbles__1123 = function()
+  temper.test('TableDef field lookup - not found bubbles', function(test_474)
+    local t_475, t_476, t_477, t_478, local_479, local_480, local_481, local_483, local_484, local_485, t_487, t_488, td__786, didBubble__787, local_489, local_490, local_491, fn__4789;
+    local_479, local_480, local_481 = temper.pcall(function()
+      t_475 = safeIdentifier('users');
+      t_476 = t_475;
     end);
-    if local_419 then
+    if local_479 then
     else
-      t_416 = temper.bubble();
+      t_476 = temper.bubble();
     end
-    local_423, local_424, local_425 = temper.pcall(function()
-      t_417 = safeIdentifier('name');
-      t_418 = t_417;
+    local_483, local_484, local_485 = temper.pcall(function()
+      t_477 = safeIdentifier('name');
+      t_478 = t_477;
     end);
-    if local_423 then
+    if local_483 then
     else
-      t_418 = temper.bubble();
+      t_478 = temper.bubble();
     end
-    t_427 = StringField();
-    t_428 = FieldDef(t_418, t_427, false);
-    td__678 = TableDef(t_416, temper.listof(t_428));
-    local_429, local_430, local_431 = temper.pcall(function()
-      td__678:field('nonexistent');
-      didBubble__679 = false;
+    t_487 = StringField();
+    t_488 = FieldDef(t_478, t_487, false);
+    td__786 = TableDef(t_476, temper.listof(t_488));
+    local_489, local_490, local_491 = temper.pcall(function()
+      td__786:field('nonexistent');
+      didBubble__787 = false;
     end);
-    if local_429 then
+    if local_489 then
     else
-      didBubble__679 = true;
+      didBubble__787 = true;
     end
-    fn__4255 = function()
+    fn__4789 = function()
       return 'unknown field should bubble';
     end;
-    temper.test_assert(test_414, didBubble__679, fn__4255);
+    temper.test_assert(test_474, didBubble__787, fn__4789);
     return nil;
   end);
 end;
-Test_.test_fieldDefNullableFlag__984 = function()
-  temper.test('FieldDef nullable flag', function(test_433)
-    local t_434, t_435, t_436, t_437, local_438, local_439, local_440, t_442, required__681, local_443, local_444, local_445, t_447, optional__682, t_448, fn__4243, t_449, fn__4242;
-    local_438, local_439, local_440 = temper.pcall(function()
-      t_434 = safeIdentifier('email');
-      t_435 = t_434;
+Test_.test_fieldDefNullableFlag__1124 = function()
+  temper.test('FieldDef nullable flag', function(test_493)
+    local t_494, t_495, t_496, t_497, local_498, local_499, local_500, t_502, required__789, local_503, local_504, local_505, t_507, optional__790, t_508, fn__4777, t_509, fn__4776;
+    local_498, local_499, local_500 = temper.pcall(function()
+      t_494 = safeIdentifier('email');
+      t_495 = t_494;
     end);
-    if local_438 then
+    if local_498 then
     else
-      t_435 = temper.bubble();
+      t_495 = temper.bubble();
     end
-    t_442 = StringField();
-    required__681 = FieldDef(t_435, t_442, false);
-    local_443, local_444, local_445 = temper.pcall(function()
-      t_436 = safeIdentifier('bio');
-      t_437 = t_436;
+    t_502 = StringField();
+    required__789 = FieldDef(t_495, t_502, false);
+    local_503, local_504, local_505 = temper.pcall(function()
+      t_496 = safeIdentifier('bio');
+      t_497 = t_496;
     end);
-    if local_443 then
+    if local_503 then
     else
-      t_437 = temper.bubble();
+      t_497 = temper.bubble();
     end
-    t_447 = StringField();
-    optional__682 = FieldDef(t_437, t_447, true);
-    t_448 = not required__681.nullable;
-    fn__4243 = function()
+    t_507 = StringField();
+    optional__790 = FieldDef(t_497, t_507, true);
+    t_508 = not required__789.nullable;
+    fn__4777 = function()
       return 'required field should not be nullable';
     end;
-    temper.test_assert(test_433, t_448, fn__4243);
-    t_449 = optional__682.nullable;
-    fn__4242 = function()
+    temper.test_assert(test_493, t_508, fn__4777);
+    t_509 = optional__790.nullable;
+    fn__4776 = function()
       return 'optional field should be nullable';
     end;
-    temper.test_assert(test_433, t_449, fn__4242);
+    temper.test_assert(test_493, t_509, fn__4776);
     return nil;
   end);
 end;
-Test_.test_stringEscaping__985 = function()
-  temper.test('string escaping', function(test_450)
-    local build__808, buildWrong__809, actual_452, t_453, fn__4231, bobbyTables__814, actual_454, t_455, fn__4230, fn__4229;
-    build__808 = function(name__810)
-      local t_451;
-      t_451 = SqlBuilder();
-      t_451:appendSafe('select * from hi where name = ');
-      t_451:appendString(name__810);
-      return t_451.accumulated:toString();
+Test_.test_stringEscaping__1125 = function()
+  temper.test('string escaping', function(test_510)
+    local build__916, buildWrong__917, actual_512, t_513, fn__4765, bobbyTables__922, actual_514, t_515, fn__4764, fn__4763;
+    build__916 = function(name__918)
+      local t_511;
+      t_511 = SqlBuilder();
+      t_511:appendSafe('select * from hi where name = ');
+      t_511:appendString(name__918);
+      return t_511.accumulated:toString();
     end;
-    buildWrong__809 = function(name__812)
-      return temper.concat("select * from hi where name = '", name__812, "'");
+    buildWrong__917 = function(name__920)
+      return temper.concat("select * from hi where name = '", name__920, "'");
     end;
-    actual_452 = build__808('world');
-    t_453 = temper.str_eq(actual_452, "select * from hi where name = 'world'");
-    fn__4231 = function()
-      return temper.concat('expected build("world") == (', "select * from hi where name = 'world'", ') not (', actual_452, ')');
+    actual_512 = build__916('world');
+    t_513 = temper.str_eq(actual_512, "select * from hi where name = 'world'");
+    fn__4765 = function()
+      return temper.concat('expected build("world") == (', "select * from hi where name = 'world'", ') not (', actual_512, ')');
     end;
-    temper.test_assert(test_450, t_453, fn__4231);
-    bobbyTables__814 = "Robert'); drop table hi;--";
-    actual_454 = build__808("Robert'); drop table hi;--");
-    t_455 = temper.str_eq(actual_454, "select * from hi where name = 'Robert''); drop table hi;--'");
-    fn__4230 = function()
-      return temper.concat('expected build(bobbyTables) == (', "select * from hi where name = 'Robert''); drop table hi;--'", ') not (', actual_454, ')');
+    temper.test_assert(test_510, t_513, fn__4765);
+    bobbyTables__922 = "Robert'); drop table hi;--";
+    actual_514 = build__916("Robert'); drop table hi;--");
+    t_515 = temper.str_eq(actual_514, "select * from hi where name = 'Robert''); drop table hi;--'");
+    fn__4764 = function()
+      return temper.concat('expected build(bobbyTables) == (', "select * from hi where name = 'Robert''); drop table hi;--'", ') not (', actual_514, ')');
     end;
-    temper.test_assert(test_450, t_455, fn__4230);
-    fn__4229 = function()
+    temper.test_assert(test_510, t_515, fn__4764);
+    fn__4763 = function()
       return "expected buildWrong(bobbyTables) == (select * from hi where name = 'Robert'); drop table hi;--') not (select * from hi where name = 'Robert'); drop table hi;--')";
     end;
-    temper.test_assert(test_450, true, fn__4229);
+    temper.test_assert(test_510, true, fn__4763);
     return nil;
   end);
 end;
-Test_.test_stringEdgeCases__993 = function()
-  temper.test('string edge cases', function(test_456)
-    local t_457, actual_458, t_459, fn__4191, t_460, actual_461, t_462, fn__4190, t_463, actual_464, t_465, fn__4189, t_466, actual_467, t_468, fn__4188;
-    t_457 = SqlBuilder();
-    t_457:appendSafe('v = ');
-    t_457:appendString('');
-    actual_458 = t_457.accumulated:toString();
-    t_459 = temper.str_eq(actual_458, "v = ''");
-    fn__4191 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "").toString() == (', "v = ''", ') not (', actual_458, ')');
-    end;
-    temper.test_assert(test_456, t_459, fn__4191);
-    t_460 = SqlBuilder();
-    t_460:appendSafe('v = ');
-    t_460:appendString("a''b");
-    actual_461 = t_460.accumulated:toString();
-    t_462 = temper.str_eq(actual_461, "v = 'a''''b'");
-    fn__4190 = function()
-      return temper.concat("expected stringExpr(`-work//src/`.sql, true, \"v = \", \\interpolate, \"a''b\").toString() == (", "v = 'a''''b'", ') not (', actual_461, ')');
-    end;
-    temper.test_assert(test_456, t_462, fn__4190);
-    t_463 = SqlBuilder();
-    t_463:appendSafe('v = ');
-    t_463:appendString('Hello \xe4\xb8\x96\xe7\x95\x8c');
-    actual_464 = t_463.accumulated:toString();
-    t_465 = temper.str_eq(actual_464, "v = 'Hello \xe4\xb8\x96\xe7\x95\x8c'");
-    fn__4189 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "Hello \xe4\xb8\x96\xe7\x95\x8c").toString() == (', "v = 'Hello \xe4\xb8\x96\xe7\x95\x8c'", ') not (', actual_464, ')');
-    end;
-    temper.test_assert(test_456, t_465, fn__4189);
-    t_466 = SqlBuilder();
-    t_466:appendSafe('v = ');
-    t_466:appendString('Line1\nLine2');
-    actual_467 = t_466.accumulated:toString();
-    t_468 = temper.str_eq(actual_467, "v = 'Line1\nLine2'");
-    fn__4188 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "Line1\\nLine2").toString() == (', "v = 'Line1\nLine2'", ') not (', actual_467, ')');
-    end;
-    temper.test_assert(test_456, t_468, fn__4188);
-    return nil;
-  end);
-end;
-Test_.test_numbersAndBooleans__1006 = function()
-  temper.test('numbers and booleans', function(test_469)
-    local t_470, t_471, actual_472, t_473, fn__4162, date__817, local_474, local_475, local_476, t_478, actual_479, t_480, fn__4161;
-    t_471 = SqlBuilder();
-    t_471:appendSafe('select ');
-    t_471:appendInt32(42);
-    t_471:appendSafe(', ');
-    t_471:appendInt64(temper.int64_constructor(43));
-    t_471:appendSafe(', ');
-    t_471:appendFloat64(19.99);
-    t_471:appendSafe(', ');
-    t_471:appendBoolean(true);
-    t_471:appendSafe(', ');
-    t_471:appendBoolean(false);
-    actual_472 = t_471.accumulated:toString();
-    t_473 = temper.str_eq(actual_472, 'select 42, 43, 19.99, TRUE, FALSE');
-    fn__4162 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select ", \\interpolate, 42, ", ", \\interpolate, 43, ", ", \\interpolate, 19.99, ", ", \\interpolate, true, ", ", \\interpolate, false).toString() == (', 'select 42, 43, 19.99, TRUE, FALSE', ') not (', actual_472, ')');
-    end;
-    temper.test_assert(test_469, t_473, fn__4162);
-    local_474, local_475, local_476 = temper.pcall(function()
-      t_470 = temper.date_constructor(2024, 12, 25);
-      date__817 = t_470;
-    end);
-    if local_474 then
-    else
-      date__817 = temper.bubble();
-    end
-    t_478 = SqlBuilder();
-    t_478:appendSafe('insert into t values (');
-    t_478:appendDate(date__817);
-    t_478:appendSafe(')');
-    actual_479 = t_478.accumulated:toString();
-    t_480 = temper.str_eq(actual_479, "insert into t values ('2024-12-25')");
-    fn__4161 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "insert into t values (", \\interpolate, date, ")").toString() == (', "insert into t values ('2024-12-25')", ') not (', actual_479, ')');
-    end;
-    temper.test_assert(test_469, t_480, fn__4161);
-    return nil;
-  end);
-end;
-Test_.test_lists__1013 = function()
-  temper.test('lists', function(test_481)
-    local t_482, t_483, t_484, t_485, t_486, actual_487, t_488, fn__4106, t_489, actual_490, t_491, fn__4105, t_492, actual_493, t_494, fn__4104, t_495, actual_496, t_497, fn__4103, t_498, actual_499, t_500, fn__4102, local_501, local_502, local_503, local_505, local_506, local_507, dates__819, t_509, actual_510, t_511, fn__4101;
-    t_486 = SqlBuilder();
-    t_486:appendSafe('v IN (');
-    t_486:appendStringList(temper.listof('a', 'b', "c'd"));
-    t_486:appendSafe(')');
-    actual_487 = t_486.accumulated:toString();
-    t_488 = temper.str_eq(actual_487, "v IN ('a', 'b', 'c''d')");
-    fn__4106 = function()
-      return temper.concat("expected stringExpr(`-work//src/`.sql, true, \"v IN (\", \\interpolate, list(\"a\", \"b\", \"c'd\"), \")\").toString() == (", "v IN ('a', 'b', 'c''d')", ') not (', actual_487, ')');
-    end;
-    temper.test_assert(test_481, t_488, fn__4106);
-    t_489 = SqlBuilder();
-    t_489:appendSafe('v IN (');
-    t_489:appendInt32List(temper.listof(1, 2, 3));
-    t_489:appendSafe(')');
-    actual_490 = t_489.accumulated:toString();
-    t_491 = temper.str_eq(actual_490, 'v IN (1, 2, 3)');
-    fn__4105 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1, 2, 3), ")").toString() == (', 'v IN (1, 2, 3)', ') not (', actual_490, ')');
-    end;
-    temper.test_assert(test_481, t_491, fn__4105);
-    t_492 = SqlBuilder();
-    t_492:appendSafe('v IN (');
-    t_492:appendInt64List(temper.listof(temper.int64_constructor(1), temper.int64_constructor(2)));
-    t_492:appendSafe(')');
-    actual_493 = t_492.accumulated:toString();
-    t_494 = temper.str_eq(actual_493, 'v IN (1, 2)');
-    fn__4104 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1, 2), ")").toString() == (', 'v IN (1, 2)', ') not (', actual_493, ')');
-    end;
-    temper.test_assert(test_481, t_494, fn__4104);
-    t_495 = SqlBuilder();
-    t_495:appendSafe('v IN (');
-    t_495:appendFloat64List(temper.listof(1.0, 2.0));
-    t_495:appendSafe(')');
-    actual_496 = t_495.accumulated:toString();
-    t_497 = temper.str_eq(actual_496, 'v IN (1.0, 2.0)');
-    fn__4103 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1.0, 2.0), ")").toString() == (', 'v IN (1.0, 2.0)', ') not (', actual_496, ')');
-    end;
-    temper.test_assert(test_481, t_497, fn__4103);
-    t_498 = SqlBuilder();
-    t_498:appendSafe('v IN (');
-    t_498:appendBooleanList(temper.listof(true, false));
-    t_498:appendSafe(')');
-    actual_499 = t_498.accumulated:toString();
-    t_500 = temper.str_eq(actual_499, 'v IN (TRUE, FALSE)');
-    fn__4102 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(true, false), ")").toString() == (', 'v IN (TRUE, FALSE)', ') not (', actual_499, ')');
-    end;
-    temper.test_assert(test_481, t_500, fn__4102);
-    local_501, local_502, local_503 = temper.pcall(function()
-      t_482 = temper.date_constructor(2024, 1, 1);
-      t_483 = t_482;
-    end);
-    if local_501 then
-    else
-      t_483 = temper.bubble();
-    end
-    local_505, local_506, local_507 = temper.pcall(function()
-      t_484 = temper.date_constructor(2024, 12, 25);
-      t_485 = t_484;
-    end);
-    if local_505 then
-    else
-      t_485 = temper.bubble();
-    end
-    dates__819 = temper.listof(t_483, t_485);
-    t_509 = SqlBuilder();
-    t_509:appendSafe('v IN (');
-    t_509:appendDateList(dates__819);
-    t_509:appendSafe(')');
-    actual_510 = t_509.accumulated:toString();
-    t_511 = temper.str_eq(actual_510, "v IN ('2024-01-01', '2024-12-25')");
-    fn__4101 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, dates, ")").toString() == (', "v IN ('2024-01-01', '2024-12-25')", ') not (', actual_510, ')');
-    end;
-    temper.test_assert(test_481, t_511, fn__4101);
-    return nil;
-  end);
-end;
-Test_.test_sqlFloat64_naNRendersAsNull__1032 = function()
-  temper.test('SqlFloat64 NaN renders as NULL', function(test_512)
-    local nan__821, t_513, actual_514, t_515, fn__4092;
-    nan__821 = temper.fdiv(0.0, 0.0);
-    t_513 = SqlBuilder();
-    t_513:appendSafe('v = ');
-    t_513:appendFloat64(nan__821);
-    actual_514 = t_513.accumulated:toString();
-    t_515 = temper.str_eq(actual_514, 'v = NULL');
-    fn__4092 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, nan).toString() == (', 'v = NULL', ') not (', actual_514, ')');
-    end;
-    temper.test_assert(test_512, t_515, fn__4092);
-    return nil;
-  end);
-end;
-Test_.test_sqlFloat64_infinityRendersAsNull__1036 = function()
-  temper.test('SqlFloat64 Infinity renders as NULL', function(test_516)
-    local inf__823, t_517, actual_518, t_519, fn__4083;
-    inf__823 = temper.fdiv(1.0, 0.0);
+Test_.test_stringEdgeCases__1133 = function()
+  temper.test('string edge cases', function(test_516)
+    local t_517, actual_518, t_519, fn__4725, t_520, actual_521, t_522, fn__4724, t_523, actual_524, t_525, fn__4723, t_526, actual_527, t_528, fn__4722;
     t_517 = SqlBuilder();
     t_517:appendSafe('v = ');
-    t_517:appendFloat64(inf__823);
+    t_517:appendString('');
     actual_518 = t_517.accumulated:toString();
-    t_519 = temper.str_eq(actual_518, 'v = NULL');
-    fn__4083 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, inf).toString() == (', 'v = NULL', ') not (', actual_518, ')');
+    t_519 = temper.str_eq(actual_518, "v = ''");
+    fn__4725 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "").toString() == (', "v = ''", ') not (', actual_518, ')');
     end;
-    temper.test_assert(test_516, t_519, fn__4083);
+    temper.test_assert(test_516, t_519, fn__4725);
+    t_520 = SqlBuilder();
+    t_520:appendSafe('v = ');
+    t_520:appendString("a''b");
+    actual_521 = t_520.accumulated:toString();
+    t_522 = temper.str_eq(actual_521, "v = 'a''''b'");
+    fn__4724 = function()
+      return temper.concat("expected stringExpr(`-work//src/`.sql, true, \"v = \", \\interpolate, \"a''b\").toString() == (", "v = 'a''''b'", ') not (', actual_521, ')');
+    end;
+    temper.test_assert(test_516, t_522, fn__4724);
+    t_523 = SqlBuilder();
+    t_523:appendSafe('v = ');
+    t_523:appendString('Hello \xe4\xb8\x96\xe7\x95\x8c');
+    actual_524 = t_523.accumulated:toString();
+    t_525 = temper.str_eq(actual_524, "v = 'Hello \xe4\xb8\x96\xe7\x95\x8c'");
+    fn__4723 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "Hello \xe4\xb8\x96\xe7\x95\x8c").toString() == (', "v = 'Hello \xe4\xb8\x96\xe7\x95\x8c'", ') not (', actual_524, ')');
+    end;
+    temper.test_assert(test_516, t_525, fn__4723);
+    t_526 = SqlBuilder();
+    t_526:appendSafe('v = ');
+    t_526:appendString('Line1\nLine2');
+    actual_527 = t_526.accumulated:toString();
+    t_528 = temper.str_eq(actual_527, "v = 'Line1\nLine2'");
+    fn__4722 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, "Line1\\nLine2").toString() == (', "v = 'Line1\nLine2'", ') not (', actual_527, ')');
+    end;
+    temper.test_assert(test_516, t_528, fn__4722);
     return nil;
   end);
 end;
-Test_.test_sqlFloat64_negativeInfinityRendersAsNull__1040 = function()
-  temper.test('SqlFloat64 negative Infinity renders as NULL', function(test_520)
-    local ninf__825, t_521, actual_522, t_523, fn__4074;
-    ninf__825 = temper.fdiv(-1.0, 0.0);
-    t_521 = SqlBuilder();
-    t_521:appendSafe('v = ');
-    t_521:appendFloat64(ninf__825);
-    actual_522 = t_521.accumulated:toString();
-    t_523 = temper.str_eq(actual_522, 'v = NULL');
-    fn__4074 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, ninf).toString() == (', 'v = NULL', ') not (', actual_522, ')');
-    end;
-    temper.test_assert(test_520, t_523, fn__4074);
-    return nil;
-  end);
-end;
-Test_.test_sqlFloat64_normalValuesStillWork__1044 = function()
-  temper.test('SqlFloat64 normal values still work', function(test_524)
-    local t_525, actual_526, t_527, fn__4049, t_528, actual_529, t_530, fn__4048, t_531, actual_532, t_533, fn__4047;
-    t_525 = SqlBuilder();
-    t_525:appendSafe('v = ');
-    t_525:appendFloat64(3.14);
-    actual_526 = t_525.accumulated:toString();
-    t_527 = temper.str_eq(actual_526, 'v = 3.14');
-    fn__4049 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, 3.14).toString() == (', 'v = 3.14', ') not (', actual_526, ')');
-    end;
-    temper.test_assert(test_524, t_527, fn__4049);
-    t_528 = SqlBuilder();
-    t_528:appendSafe('v = ');
-    t_528:appendFloat64(0.0);
-    actual_529 = t_528.accumulated:toString();
-    t_530 = temper.str_eq(actual_529, 'v = 0.0');
-    fn__4048 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, 0.0).toString() == (', 'v = 0.0', ') not (', actual_529, ')');
-    end;
-    temper.test_assert(test_524, t_530, fn__4048);
+Test_.test_numbersAndBooleans__1146 = function()
+  temper.test('numbers and booleans', function(test_529)
+    local t_530, t_531, actual_532, t_533, fn__4696, date__925, local_534, local_535, local_536, t_538, actual_539, t_540, fn__4695;
     t_531 = SqlBuilder();
-    t_531:appendSafe('v = ');
-    t_531:appendFloat64(-42.5);
+    t_531:appendSafe('select ');
+    t_531:appendInt32(42);
+    t_531:appendSafe(', ');
+    t_531:appendInt64(temper.int64_constructor(43));
+    t_531:appendSafe(', ');
+    t_531:appendFloat64(19.99);
+    t_531:appendSafe(', ');
+    t_531:appendBoolean(true);
+    t_531:appendSafe(', ');
+    t_531:appendBoolean(false);
     actual_532 = t_531.accumulated:toString();
-    t_533 = temper.str_eq(actual_532, 'v = -42.5');
-    fn__4047 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, -42.5).toString() == (', 'v = -42.5', ') not (', actual_532, ')');
+    t_533 = temper.str_eq(actual_532, 'select 42, 43, 19.99, TRUE, FALSE');
+    fn__4696 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select ", \\interpolate, 42, ", ", \\interpolate, 43, ", ", \\interpolate, 19.99, ", ", \\interpolate, true, ", ", \\interpolate, false).toString() == (', 'select 42, 43, 19.99, TRUE, FALSE', ') not (', actual_532, ')');
     end;
-    temper.test_assert(test_524, t_533, fn__4047);
-    return nil;
-  end);
-end;
-Test_.test_sqlDateRendersWithQuotes__1054 = function()
-  temper.test('SqlDate renders with quotes', function(test_534)
-    local t_535, d__828, local_536, local_537, local_538, t_540, actual_541, t_542, fn__4038;
-    local_536, local_537, local_538 = temper.pcall(function()
-      t_535 = temper.date_constructor(2024, 6, 15);
-      d__828 = t_535;
+    temper.test_assert(test_529, t_533, fn__4696);
+    local_534, local_535, local_536 = temper.pcall(function()
+      t_530 = temper.date_constructor(2024, 12, 25);
+      date__925 = t_530;
     end);
-    if local_536 then
+    if local_534 then
     else
-      d__828 = temper.bubble();
+      date__925 = temper.bubble();
     end
-    t_540 = SqlBuilder();
-    t_540:appendSafe('v = ');
-    t_540:appendDate(d__828);
-    actual_541 = t_540.accumulated:toString();
-    t_542 = temper.str_eq(actual_541, "v = '2024-06-15'");
-    fn__4038 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, d).toString() == (', "v = '2024-06-15'", ') not (', actual_541, ')');
+    t_538 = SqlBuilder();
+    t_538:appendSafe('insert into t values (');
+    t_538:appendDate(date__925);
+    t_538:appendSafe(')');
+    actual_539 = t_538.accumulated:toString();
+    t_540 = temper.str_eq(actual_539, "insert into t values ('2024-12-25')");
+    fn__4695 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "insert into t values (", \\interpolate, date, ")").toString() == (', "insert into t values ('2024-12-25')", ') not (', actual_539, ')');
     end;
-    temper.test_assert(test_534, t_542, fn__4038);
+    temper.test_assert(test_529, t_540, fn__4695);
     return nil;
   end);
 end;
-Test_.test_nesting__1058 = function()
-  temper.test('nesting', function(test_543)
-    local name__830, t_544, condition__831, t_545, actual_546, t_547, fn__4006, t_548, actual_549, t_550, fn__4005, parts__832, t_551, actual_552, t_553, fn__4004;
-    name__830 = 'Someone';
-    t_544 = SqlBuilder();
-    t_544:appendSafe('where p.last_name = ');
-    t_544:appendString('Someone');
-    condition__831 = t_544.accumulated;
-    t_545 = SqlBuilder();
-    t_545:appendSafe('select p.id from person p ');
-    t_545:appendFragment(condition__831);
-    actual_546 = t_545.accumulated:toString();
-    t_547 = temper.str_eq(actual_546, "select p.id from person p where p.last_name = 'Someone'");
-    fn__4006 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select p.id from person p ", \\interpolate, condition).toString() == (', "select p.id from person p where p.last_name = 'Someone'", ') not (', actual_546, ')');
+Test_.test_lists__1153 = function()
+  temper.test('lists', function(test_541)
+    local t_542, t_543, t_544, t_545, t_546, actual_547, t_548, fn__4640, t_549, actual_550, t_551, fn__4639, t_552, actual_553, t_554, fn__4638, t_555, actual_556, t_557, fn__4637, t_558, actual_559, t_560, fn__4636, local_561, local_562, local_563, local_565, local_566, local_567, dates__927, t_569, actual_570, t_571, fn__4635;
+    t_546 = SqlBuilder();
+    t_546:appendSafe('v IN (');
+    t_546:appendStringList(temper.listof('a', 'b', "c'd"));
+    t_546:appendSafe(')');
+    actual_547 = t_546.accumulated:toString();
+    t_548 = temper.str_eq(actual_547, "v IN ('a', 'b', 'c''d')");
+    fn__4640 = function()
+      return temper.concat("expected stringExpr(`-work//src/`.sql, true, \"v IN (\", \\interpolate, list(\"a\", \"b\", \"c'd\"), \")\").toString() == (", "v IN ('a', 'b', 'c''d')", ') not (', actual_547, ')');
     end;
-    temper.test_assert(test_543, t_547, fn__4006);
-    t_548 = SqlBuilder();
-    t_548:appendSafe('select p.id from person p ');
-    t_548:appendPart(condition__831:toSource());
-    actual_549 = t_548.accumulated:toString();
-    t_550 = temper.str_eq(actual_549, "select p.id from person p where p.last_name = 'Someone'");
-    fn__4005 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select p.id from person p ", \\interpolate, condition.toSource()).toString() == (', "select p.id from person p where p.last_name = 'Someone'", ') not (', actual_549, ')');
+    temper.test_assert(test_541, t_548, fn__4640);
+    t_549 = SqlBuilder();
+    t_549:appendSafe('v IN (');
+    t_549:appendInt32List(temper.listof(1, 2, 3));
+    t_549:appendSafe(')');
+    actual_550 = t_549.accumulated:toString();
+    t_551 = temper.str_eq(actual_550, 'v IN (1, 2, 3)');
+    fn__4639 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1, 2, 3), ")").toString() == (', 'v IN (1, 2, 3)', ') not (', actual_550, ')');
     end;
-    temper.test_assert(test_543, t_550, fn__4005);
-    parts__832 = temper.listof(SqlString("a'b"), SqlInt32(3));
-    t_551 = SqlBuilder();
-    t_551:appendSafe('select ');
-    t_551:appendPartList(parts__832);
-    actual_552 = t_551.accumulated:toString();
-    t_553 = temper.str_eq(actual_552, "select 'a''b', 3");
-    fn__4004 = function()
-      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select ", \\interpolate, parts).toString() == (', "select 'a''b', 3", ') not (', actual_552, ')');
+    temper.test_assert(test_541, t_551, fn__4639);
+    t_552 = SqlBuilder();
+    t_552:appendSafe('v IN (');
+    t_552:appendInt64List(temper.listof(temper.int64_constructor(1), temper.int64_constructor(2)));
+    t_552:appendSafe(')');
+    actual_553 = t_552.accumulated:toString();
+    t_554 = temper.str_eq(actual_553, 'v IN (1, 2)');
+    fn__4638 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1, 2), ")").toString() == (', 'v IN (1, 2)', ') not (', actual_553, ')');
     end;
-    temper.test_assert(test_543, t_553, fn__4004);
+    temper.test_assert(test_541, t_554, fn__4638);
+    t_555 = SqlBuilder();
+    t_555:appendSafe('v IN (');
+    t_555:appendFloat64List(temper.listof(1.0, 2.0));
+    t_555:appendSafe(')');
+    actual_556 = t_555.accumulated:toString();
+    t_557 = temper.str_eq(actual_556, 'v IN (1.0, 2.0)');
+    fn__4637 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(1.0, 2.0), ")").toString() == (', 'v IN (1.0, 2.0)', ') not (', actual_556, ')');
+    end;
+    temper.test_assert(test_541, t_557, fn__4637);
+    t_558 = SqlBuilder();
+    t_558:appendSafe('v IN (');
+    t_558:appendBooleanList(temper.listof(true, false));
+    t_558:appendSafe(')');
+    actual_559 = t_558.accumulated:toString();
+    t_560 = temper.str_eq(actual_559, 'v IN (TRUE, FALSE)');
+    fn__4636 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, list(true, false), ")").toString() == (', 'v IN (TRUE, FALSE)', ') not (', actual_559, ')');
+    end;
+    temper.test_assert(test_541, t_560, fn__4636);
+    local_561, local_562, local_563 = temper.pcall(function()
+      t_542 = temper.date_constructor(2024, 1, 1);
+      t_543 = t_542;
+    end);
+    if local_561 then
+    else
+      t_543 = temper.bubble();
+    end
+    local_565, local_566, local_567 = temper.pcall(function()
+      t_544 = temper.date_constructor(2024, 12, 25);
+      t_545 = t_544;
+    end);
+    if local_565 then
+    else
+      t_545 = temper.bubble();
+    end
+    dates__927 = temper.listof(t_543, t_545);
+    t_569 = SqlBuilder();
+    t_569:appendSafe('v IN (');
+    t_569:appendDateList(dates__927);
+    t_569:appendSafe(')');
+    actual_570 = t_569.accumulated:toString();
+    t_571 = temper.str_eq(actual_570, "v IN ('2024-01-01', '2024-12-25')");
+    fn__4635 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v IN (", \\interpolate, dates, ")").toString() == (', "v IN ('2024-01-01', '2024-12-25')", ') not (', actual_570, ')');
+    end;
+    temper.test_assert(test_541, t_571, fn__4635);
+    return nil;
+  end);
+end;
+Test_.test_sqlFloat64_naNRendersAsNull__1172 = function()
+  temper.test('SqlFloat64 NaN renders as NULL', function(test_572)
+    local nan__929, t_573, actual_574, t_575, fn__4626;
+    nan__929 = temper.fdiv(0.0, 0.0);
+    t_573 = SqlBuilder();
+    t_573:appendSafe('v = ');
+    t_573:appendFloat64(nan__929);
+    actual_574 = t_573.accumulated:toString();
+    t_575 = temper.str_eq(actual_574, 'v = NULL');
+    fn__4626 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, nan).toString() == (', 'v = NULL', ') not (', actual_574, ')');
+    end;
+    temper.test_assert(test_572, t_575, fn__4626);
+    return nil;
+  end);
+end;
+Test_.test_sqlFloat64_infinityRendersAsNull__1176 = function()
+  temper.test('SqlFloat64 Infinity renders as NULL', function(test_576)
+    local inf__931, t_577, actual_578, t_579, fn__4617;
+    inf__931 = temper.fdiv(1.0, 0.0);
+    t_577 = SqlBuilder();
+    t_577:appendSafe('v = ');
+    t_577:appendFloat64(inf__931);
+    actual_578 = t_577.accumulated:toString();
+    t_579 = temper.str_eq(actual_578, 'v = NULL');
+    fn__4617 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, inf).toString() == (', 'v = NULL', ') not (', actual_578, ')');
+    end;
+    temper.test_assert(test_576, t_579, fn__4617);
+    return nil;
+  end);
+end;
+Test_.test_sqlFloat64_negativeInfinityRendersAsNull__1180 = function()
+  temper.test('SqlFloat64 negative Infinity renders as NULL', function(test_580)
+    local ninf__933, t_581, actual_582, t_583, fn__4608;
+    ninf__933 = temper.fdiv(-1.0, 0.0);
+    t_581 = SqlBuilder();
+    t_581:appendSafe('v = ');
+    t_581:appendFloat64(ninf__933);
+    actual_582 = t_581.accumulated:toString();
+    t_583 = temper.str_eq(actual_582, 'v = NULL');
+    fn__4608 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, ninf).toString() == (', 'v = NULL', ') not (', actual_582, ')');
+    end;
+    temper.test_assert(test_580, t_583, fn__4608);
+    return nil;
+  end);
+end;
+Test_.test_sqlFloat64_normalValuesStillWork__1184 = function()
+  temper.test('SqlFloat64 normal values still work', function(test_584)
+    local t_585, actual_586, t_587, fn__4583, t_588, actual_589, t_590, fn__4582, t_591, actual_592, t_593, fn__4581;
+    t_585 = SqlBuilder();
+    t_585:appendSafe('v = ');
+    t_585:appendFloat64(3.14);
+    actual_586 = t_585.accumulated:toString();
+    t_587 = temper.str_eq(actual_586, 'v = 3.14');
+    fn__4583 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, 3.14).toString() == (', 'v = 3.14', ') not (', actual_586, ')');
+    end;
+    temper.test_assert(test_584, t_587, fn__4583);
+    t_588 = SqlBuilder();
+    t_588:appendSafe('v = ');
+    t_588:appendFloat64(0.0);
+    actual_589 = t_588.accumulated:toString();
+    t_590 = temper.str_eq(actual_589, 'v = 0.0');
+    fn__4582 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, 0.0).toString() == (', 'v = 0.0', ') not (', actual_589, ')');
+    end;
+    temper.test_assert(test_584, t_590, fn__4582);
+    t_591 = SqlBuilder();
+    t_591:appendSafe('v = ');
+    t_591:appendFloat64(-42.5);
+    actual_592 = t_591.accumulated:toString();
+    t_593 = temper.str_eq(actual_592, 'v = -42.5');
+    fn__4581 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, -42.5).toString() == (', 'v = -42.5', ') not (', actual_592, ')');
+    end;
+    temper.test_assert(test_584, t_593, fn__4581);
+    return nil;
+  end);
+end;
+Test_.test_sqlDateRendersWithQuotes__1194 = function()
+  temper.test('SqlDate renders with quotes', function(test_594)
+    local t_595, d__936, local_596, local_597, local_598, t_600, actual_601, t_602, fn__4572;
+    local_596, local_597, local_598 = temper.pcall(function()
+      t_595 = temper.date_constructor(2024, 6, 15);
+      d__936 = t_595;
+    end);
+    if local_596 then
+    else
+      d__936 = temper.bubble();
+    end
+    t_600 = SqlBuilder();
+    t_600:appendSafe('v = ');
+    t_600:appendDate(d__936);
+    actual_601 = t_600.accumulated:toString();
+    t_602 = temper.str_eq(actual_601, "v = '2024-06-15'");
+    fn__4572 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "v = ", \\interpolate, d).toString() == (', "v = '2024-06-15'", ') not (', actual_601, ')');
+    end;
+    temper.test_assert(test_594, t_602, fn__4572);
+    return nil;
+  end);
+end;
+Test_.test_nesting__1198 = function()
+  temper.test('nesting', function(test_603)
+    local name__938, t_604, condition__939, t_605, actual_606, t_607, fn__4540, t_608, actual_609, t_610, fn__4539, parts__940, t_611, actual_612, t_613, fn__4538;
+    name__938 = 'Someone';
+    t_604 = SqlBuilder();
+    t_604:appendSafe('where p.last_name = ');
+    t_604:appendString('Someone');
+    condition__939 = t_604.accumulated;
+    t_605 = SqlBuilder();
+    t_605:appendSafe('select p.id from person p ');
+    t_605:appendFragment(condition__939);
+    actual_606 = t_605.accumulated:toString();
+    t_607 = temper.str_eq(actual_606, "select p.id from person p where p.last_name = 'Someone'");
+    fn__4540 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select p.id from person p ", \\interpolate, condition).toString() == (', "select p.id from person p where p.last_name = 'Someone'", ') not (', actual_606, ')');
+    end;
+    temper.test_assert(test_603, t_607, fn__4540);
+    t_608 = SqlBuilder();
+    t_608:appendSafe('select p.id from person p ');
+    t_608:appendPart(condition__939:toSource());
+    actual_609 = t_608.accumulated:toString();
+    t_610 = temper.str_eq(actual_609, "select p.id from person p where p.last_name = 'Someone'");
+    fn__4539 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select p.id from person p ", \\interpolate, condition.toSource()).toString() == (', "select p.id from person p where p.last_name = 'Someone'", ') not (', actual_609, ')');
+    end;
+    temper.test_assert(test_603, t_610, fn__4539);
+    parts__940 = temper.listof(SqlString("a'b"), SqlInt32(3));
+    t_611 = SqlBuilder();
+    t_611:appendSafe('select ');
+    t_611:appendPartList(parts__940);
+    actual_612 = t_611.accumulated:toString();
+    t_613 = temper.str_eq(actual_612, "select 'a''b', 3");
+    fn__4538 = function()
+      return temper.concat('expected stringExpr(`-work//src/`.sql, true, "select ", \\interpolate, parts).toString() == (', "select 'a''b', 3", ') not (', actual_612, ')');
+    end;
+    temper.test_assert(test_603, t_613, fn__4538);
     return nil;
   end);
 end;
 exports = {};
-local_555.LuaUnit.run(local_554({'--pattern', '^Test_%.', local_554(arg)}));
+local_615.LuaUnit.run(local_614({'--pattern', '^Test_%.', local_614(arg)}));
 return exports;
