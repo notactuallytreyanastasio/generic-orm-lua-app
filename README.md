@@ -1,6 +1,6 @@
-# Generic ORM — Lua Demo App
+# Alloy — Lua Demo App
 
-A todo-list application built with a custom socket-based HTTP server and lsqlite3, demonstrating the [Generic ORM](https://github.com/notactuallytreyanastasio/generic_orm) compiled from Temper to Lua.
+A todo-list application built with a custom socket-based HTTP server and lsqlite3, demonstrating the [Alloy](https://github.com/notactuallytreyanastasio/alloy) compiled from Temper to Lua.
 
 ## Stack
 
@@ -9,7 +9,7 @@ A todo-list application built with a custom socket-based HTTP server and lsqlite
 | Framework | Custom TCP socket HTTP server |
 | Templates | Inline HTML generation |
 | Database | SQLite via lsqlite3 |
-| ORM | [Generic ORM](https://github.com/notactuallytreyanastasio/generic_orm) (vendored) |
+| ORM | [Alloy](https://github.com/notactuallytreyanastasio/alloy) (vendored) |
 | Port | 5005 |
 
 ## ORM Usage
@@ -56,4 +56,4 @@ The `vendor/` directory contains the ORM compiled from Temper to Lua modules. Up
 
 ---
 
-Part of the [Generic ORM](https://github.com/notactuallytreyanastasio/generic_orm) project — write once in Temper, secure everywhere.
+Part of the [Alloy](https://github.com/notactuallytreyanastasio/alloy) project — write once in Temper, secure everywhere.
